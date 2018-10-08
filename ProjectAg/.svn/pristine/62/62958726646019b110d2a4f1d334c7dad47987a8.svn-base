@@ -1,0 +1,18 @@
+	function converter(holder, myCode) {
+	        var parentDict = {};
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        if (myCode[i][0] != 'S1') {
+		            if (parentDict[myCode[i][0]] === undefined) {
+		                parentDict[myCode[i][0]] = [];
+		                parentDict[myCode[i][0]].INVOICE_NUMBER=myCode[i][0];
+		              
+		            }
+		        }
+	        }
+	        var object = new ArrayList();
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }

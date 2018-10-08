@@ -1,0 +1,46 @@
+<#setting date_format="yyyy-MM-dd">
+<sales>
+  <sale>
+    <payment>
+      <invoiceid>${configs['0'].values['0'].main[0]}</invoiceid>
+      <outlet_erp_id>${configs['0'].values['0'].main[2]?number?c}</outlet_erp_id>
+      <from_warehouse_erpid>${configs['0'].values['0'].main[4]}</from_warehouse_erpid>   
+      <amount>${configs['0'].values['0'].main[14]?trim}</amount>
+     <#-- <bill_discount>${configs['0'].values['0'].main[11]}</bill_discount>
+      <bill_discount_type>value</bill_discount_type>-->
+      <fordate>${configs['0'].values['0'].main[6]?datetime("yyyyMMdd")?date}</fordate>
+      <mode>Cash</mode>
+      <invoicebillno>${configs['0'].values['0'].main[0]}</invoicebillno>
+    </payment>
+    <#list 0..configs['0'].values['0'].skus?size-1 as i>
+     <paymentdetail>
+     <#assign amt_disc = (configs['0'].values['0'].skus[i][4]?trim?number - configs['0'].values['0'].skus[i][2]?trim?number)>
+      <skunit_erp_id>${configs['0'].values['0'].skus[i][0]}</skunit_erp_id>
+      <quantityincases>0</quantityincases>
+      <quantity>${configs['0'].values['0'].skus[i][1]?trim?number?c}</quantity>
+      <#if configs['0'].values['0'].skus[i][4]?trim?number == 0 || amt_disc == 0>
+			<discount>0</discount>
+	  <#else>
+	  		<discount>${((configs['0'].values['0'].skus[i][2]?trim?number+(configs['0'].values['0'].skus[i][5]?trim?number/amt_disc)*configs['0'].values['0'].skus[i][2]?trim?number)/configs['0'].values['0'].skus[i][1]?trim?number)?c}</discount><#--${configs['0'].values['0'].skus[i][2]?trim?number/configs['0'].values['0'].skus[i][1]?trim?number}-->
+	  </#if>
+      
+     <#-- <discount>${((configs['0'].values['0'].skus[i][2]?trim?number+(configs['0'].values['0'].skus[i][5]?trim?number/(configs['0'].values['0'].skus[i][4]?trim?number-configs['0'].values['0'].skus[i][2]?trim?number))*configs['0'].values['0'].skus[i][2]?trim?number)/configs['0'].values['0'].skus[i][1]?trim?number)?c}</discount><#--${configs['0'].values['0'].skus[i][2]?trim?number/configs['0'].values['0'].skus[i][1]?trim?number}-->
+      <discount_type>value</discount_type>
+      <status>purchased</status>
+      <#if configs['0'].values['0'].skus[i][4]?trim?number == 0 || amt_disc == 0>
+      	<amount>0</amount>
+      <#else>
+      	<amount>${((configs['0'].values['0'].skus[i][5]?trim?number+(configs['0'].values['0'].skus[i][5]?trim?number/amt_disc)*configs['0'].values['0'].skus[i][2]?trim?number)+configs['0'].values['0'].skus[i][4]?trim?number)?c}</amount><#--${configs['0'].values['0'].skus[i][3]?trim-->
+      </#if>     
+      <unitPrice>${configs['0'].values['0'].skus[i][4]?trim?number/configs['0'].values['0'].skus[i][1]?trim?number}</unitPrice>
+      <#--  GSTPERCENT = ${configs['0'].values['0'].skus[i][5]?trim?number/amt_disc} -->
+    </paymentdetail>
+    </#list>
+   <deliveryDetail>
+      <vehicle_id>${configs['0'].values['0'].main[15]}</vehicle_id>
+      <drivername>${configs['0'].values['0'].main[16]}</drivername>
+      <drivernumber>${configs['0'].values['0'].main[17]}</drivernumber>
+   </deliveryDetail>
+  </sale>
+</sales>
+

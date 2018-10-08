@@ -1,0 +1,70 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        
+	        if( myCode['env:Body'][0].OutputParameters[0].P_OM_DETAILS_TBL.size()==0)
+	        return null;
+	                    
+	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_OM_DETAILS_TBL[0].P_OM_DETAILS_TBL_ITEM;
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i].SALES_ORDER_NUMBER[0]] === undefined) {
+		                parentDict[myCode[i].SALES_ORDER_NUMBER[0]] = [];
+		                var headerObject={};
+						headerObject["SALES_ORDER_NUMBER"]=myCode[i].SALES_ORDER_NUMBER;
+						headerObject["ORDER_DATE"]=myCode[i].ORDER_DATE;
+						headerObject["ORDER_STATUS"]=myCode[i].ORDER_STATUS;
+						headerObject["CUSTOMER_NAME"]=myCode[i].CUSTOMER_NAME;
+						headerObject["CUSTOMER_NUMBER"]=myCode[i].CUSTOMER_NUMBER;
+						headerObject["CUSTOMER_PO_NUMBER"]=myCode[i].CUSTOMER_PO_NUMBER;
+						headerObject["ORDER_TYPE"]=myCode[i].ORDER_TYPE;
+						headerObject["PAYMENT_TERMS"]=myCode[i].PAYMENT_TERMS;
+						headerObject["FOB"]=myCode[i].FOB;
+						headerObject["SHIPPING_METHOD"]=myCode[i].SHIPPING_METHOD;
+						headerObject["FREIGHT_TERMS"]=myCode[i].FREIGHT_TERMS;
+						headerObject["PACKING_INSTRUCTIONS"]=myCode[i].PACKING_INSTRUCTIONS;
+						headerObject["SHIPPING_INSTRUCTIONS"]=myCode[i].SHIPPING_INSTRUCTIONS;
+						headerObject["WAREHOUSE"]=myCode[i].WAREHOUSE;
+						headerObject["OPERATING_UNIT"]=myCode[i].OPERATING_UNIT;
+						headerObject["SHIP_TO_LOCATION"]=myCode[i].SHIP_TO_LOCATION;
+						headerObject["SHIP_TO_ADDRESS"]=myCode[i].SHIP_TO_ADDRESS;
+						headerObject["SHIP_FROM_ORG_ID"]=myCode[i].SHIP_FROM_ORG_ID;
+						headerObject["BILL_TO_LOCATION"]=myCode[i].BILL_TO_LOCATION;
+						headerObject["BILL_TO_ADDRESS"]=myCode[i].BILL_TO_ADDRESS;
+						headerObject["SALESREP"]=myCode[i].SALESREP;
+		                parentDict[myCode[i].SALES_ORDER_NUMBER[0]].header=headerObject;
+		                parentDict[myCode[i].SALES_ORDER_NUMBER[0]].itemList=new ArrayList();
+		                
+		            }
+		            var item = new ArrayList();
+		            var obj={};
+		            obj["LINE_NO"]=myCode[i].LINE_NO;
+					obj["ITEMCODE"]=myCode[i].ITEMCODE;
+					obj["DESCRIPTION"]=myCode[i].DESCRIPTION;
+					obj["ORDER_QTY"]=myCode[i].ORDER_QTY;
+					obj["SHIPPED_QTY"]=myCode[i].SHIPPED_QTY;
+					obj["STATUS"]=myCode[i].STATUS;
+					obj["UNIT_PRICE"]=myCode[i].UNIT_PRICE;
+					obj["PRICE_LIST"]=myCode[i].PRICE_LIST;
+					obj["WAREHOUSE1"]=myCode[i].WAREHOUSE1;
+					obj["SHIP_FROM_ORG_ID1"]=myCode[i].SHIP_FROM_ORG_ID1;
+					obj["SHIP_TO_LOCATION1"]=myCode[i].SHIP_TO_LOCATION1;
+					obj["SHIP_TO_ADDRESS1"]=myCode[i].SHIP_TO_ADDRESS1;
+					obj["BILL_TO_LOCATION1"]=myCode[i].BILL_TO_LOCATION1;
+					obj["BILL_TO_ADDRESS1"]=myCode[i].BILL_TO_ADDRESS1;
+					obj["PROMISED_DATE"]=myCode[i].PROMISED_DATE;
+					obj["NEED_BY_DATE"]=myCode[i].NEED_BY_DATE;
+					obj["EFFECTIVE_DATE"]=myCode[i].EFFECTIVE_DATE;
+					item.add(obj);
+		           parentDict[myCode[i].SALES_ORDER_NUMBER[0]].itemList.add(item);
+		     
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }
+	    
+	    
+

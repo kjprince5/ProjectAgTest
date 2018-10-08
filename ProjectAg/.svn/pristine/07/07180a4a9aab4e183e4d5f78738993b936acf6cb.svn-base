@@ -1,0 +1,16 @@
+function converter(holder, myCode) {
+
+	var productPriceArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Response.Products.length; i++) {
+		
+		var Product = myCode.configs['0'].values['2'].Response.Products[i]
+		var productPrice = {};
+		productPrice.Distributor_Code = Product.Skunit.warehouse_erpid;
+    	productPrice.Product_Code = Product.Skunit.skucode;
+    	productPrice.Product_PTR = parseFloat(Product.Skunit.price).toFixed(4);
+    	productPrice.Effective_From = "20/03/2018";	//
+    	productPrice.Flag = Product.Skunit.active;
+    	productPriceArr.push(productPrice);
+	}
+	return JSON.stringify(productPriceArr);
+ }

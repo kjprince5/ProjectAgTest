@@ -1,0 +1,112 @@
+package com.valforma.projectag.dao;
+
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.valforma.projectag.model.IntegrationInstanceFailure;
+import com.valforma.valformacommon.dao.AbstractDAO;
+
+@Repository
+@Transactional
+public class IntegrationInstanceFailureDao extends AbstractDAO<IntegrationInstanceFailure, IntegrationInstanceFailure> {
+
+	@PersistenceContext
+	EntityManager entityManager;
+
+	@Override
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
+	@Override
+	public Class<IntegrationInstanceFailure> getClassType() {
+		return IntegrationInstanceFailure.class;
+	}
+
+	@Override
+	public String getCriteriaForVo(IntegrationInstanceFailure integrationInstanceFailure) {
+		String query = "";
+
+		if (integrationInstanceFailure.getId() != null) {
+			query = query + "and (igFail.ID)= :id ";
+		}
+		if (integrationInstanceFailure.getStepId() != null) {
+			query = query + "and (igFail.STEP_ID)= :stepId ";
+		}
+		if (integrationInstanceFailure.getClientId() != null) {
+			query = query + "and (igFail.CLIENT_ID)= :clientId ";
+		}
+		if (integrationInstanceFailure.getJobDetailId() != null) {
+			query = query + "and (igFail.JOB_DETAIL_ID)= :jobDetailId ";
+		}
+		if (integrationInstanceFailure.getNextRequestJson() != null && !integrationInstanceFailure.getNextRequestJson().isEmpty()) {
+			query = query + "and (igFail.NEXT_REQUEST_JSON) like :nextRequestJson ";
+		}
+		
+		return query;
+	}
+
+	@Override
+	public void setBindParameterForVo(Query queryJpa, IntegrationInstanceFailure integrationInstanceFailure) {
+
+		if (integrationInstanceFailure.getId() != null) {
+			queryJpa.setParameter("id", integrationInstanceFailure.getId());
+		}
+		if (integrationInstanceFailure.getStepId() != null) {
+			queryJpa.setParameter("stepId", integrationInstanceFailure.getStepId());
+		}
+		if (integrationInstanceFailure.getClientId() != null) {
+			queryJpa.setParameter("clientId", integrationInstanceFailure.getClientId());
+		}
+		if (integrationInstanceFailure.getJobDetailId() != null) {
+			queryJpa.setParameter("jobDetailId", integrationInstanceFailure.getJobDetailId());
+		}
+		if (integrationInstanceFailure.getNextRequestJson() != null && !integrationInstanceFailure.getNextRequestJson().isEmpty()) {
+			queryJpa.setParameter("nextRequestJson", "%"+integrationInstanceFailure.getNextRequestJson()+"%");
+		}
+	}
+
+	public List<IntegrationInstanceFailure> getIntegrationFailureList(IntegrationInstanceFailure i) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<IntegrationInstanceFailure> q = cb.createQuery(IntegrationInstanceFailure.class);
+		Root<IntegrationInstanceFailure> c = q.from(IntegrationInstanceFailure.class);
+		q.select(c);
+		Expression<String> literal = cb.literal("%" + i.getErrorResponse() + "%");
+		q.where(cb.equal(c.get("stepId").as(BigInteger.class), i.getStepId()), cb.equal(c.get("done"), i.isDone()),
+				cb.like(c.<String>get("errorResponse").as(String.class), literal)
+
+		);
+		TypedQuery<IntegrationInstanceFailure> tq = entityManager.createQuery(q);
+		List<IntegrationInstanceFailure> failureList = tq.getResultList();
+		return failureList;
+	}
+
+	public List<IntegrationInstanceFailure> getIntegrationFailureListByDate(IntegrationInstanceFailure i,
+			Date startDate, Date endDate) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<IntegrationInstanceFailure> q = cb.createQuery(IntegrationInstanceFailure.class);
+		Root<IntegrationInstanceFailure> c = q.from(IntegrationInstanceFailure.class);
+		q.select(c);
+		q.where(cb.equal(c.get("clientId").as(BigInteger.class), i.getClientId()),
+				cb.equal(c.get("jobDetailId").as(BigInteger.class), i.getJobDetailId()),
+				cb.equal(c.get("done"), i.isDone()),
+				cb.between(c.get("creationDate").as(Date.class), startDate, endDate));
+		TypedQuery<IntegrationInstanceFailure> tq = entityManager.createQuery(q);
+		List<IntegrationInstanceFailure> failureList = tq.getResultList();
+		return failureList;
+	}
+
+}

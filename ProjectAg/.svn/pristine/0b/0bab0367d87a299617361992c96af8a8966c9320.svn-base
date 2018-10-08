@@ -1,0 +1,42 @@
+function converter(holder, myCode) {
+	var schemeProductArr = [];
+	for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {
+		
+		var obj = myCode.configs['0'].values['2'].Response.schemedetail[key].Scheme;
+		
+		if (obj.forquantity > 0 && obj.free_skus.length > 0) {
+			for (i = 0; i < obj.free_skus.length; i++) {
+		if(obj.active==1)
+		{
+		var freeSkunitIdObj = obj.free_skus[i].free_skunit_id;
+				var schemeProduct = {};
+				schemeProduct.Scheme_Code = obj.erp_id;
+				schemeProduct.Slab_Description = obj.name;
+				for (var newKey in freeSkunitIdObj) {
+					schemeProduct.Free_Product_Code = freeSkunitIdObj[newKey].skucode // N
+					break;
+				}
+				schemeProduct.Free_Product_UOM = "PIECE"; //
+				schemeProduct.Free_Qty = obj.free_skus[i].freequantity;
+				schemeProduct.Flag = obj.active;
+	    		schemeProductArr.push(schemeProduct);
+		}
+				
+    		
+    		}
+		}	
+	}
+	return JSON.stringify(schemeProductArr);
+ }
+
+ 
+ 
+//schemeProduct.Free_Product_Code = obj.free_skus[0];
+//var newKey = Object.keys(JSON.parse(freeSkunitIdObj))[0]
+
+
+if(obj.foramount > 0 || (obj.forquantity > 0 && obj.free_skus.length == 0)) {
+	schemeProduct.Free_Qty = "0";
+} else if (obj.forquantity > 0 && obj.free_skus.length > 0) {
+	schemeProduct.Free_Qty = obj.free_skus[0].freequantity;
+}

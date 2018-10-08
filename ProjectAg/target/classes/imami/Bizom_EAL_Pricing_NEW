@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<InventoryPrice>
+		<warehouseErpId>${configs['1'].currentResponse[5]?trim}</warehouseErpId>
+		<skuCode>${configs['1'].translatorMap['1'].SKU_SAP_BIZOM[configs['1'].currentResponse[2]?trim]}</skuCode>
+		<mrp>${configs['1'].currentResponse[4]?trim}</mrp>
+		<price>${configs['1'].currentResponse[4]?trim}</price>
+		<toentityType>warehousetypes</toentityType> 
+		<#if configs['1'].currentResponse[1]?trim?number == 04>
+			<toentityTypeId>2</toentityTypeId>
+	  <#else>	
+			<toentityTypeId>3</toentityTypeId>
+			</#if>
+		<toentityTypeErpId>${configs['1'].currentResponse[0]?trim}</toentityTypeErpId>
+		<applyGst>1</applyGst>
+	</InventoryPrice>
+	<applyMarginPrice>1</applyMarginPrice>
+</data> 

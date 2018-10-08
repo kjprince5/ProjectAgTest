@@ -1,0 +1,51 @@
+function converter(holder, myCode) {
+	 var ArrayList = Java.type('java.util.ArrayList');
+	var collectionApiArr = new ArrayList();;
+	for (i = 0; i < myCode.length; i++) {
+		
+		var data = myCode[i];
+		if(data[6]=='check' || false)
+		{
+		var dataObject = {};
+		var CheckInovicedata={};
+		dataObject.warehouse_erp_id = data[1];
+    	dataObject.outlet_erp_id = data[1];
+    	dataObject.amount = data[4];
+    	dataObject.fordate = data[5];
+    	dataObject.mode =data[6];
+    	CheckInovicedata.checkno=data[7];
+    	CheckInovicedata.bankname=data[10];
+    	CheckInovicedata.checkdate=data[8];
+    	dataObject.Check=CheckInovicedata;
+		collectionApiArr.add(dataObject);
+		
+		}
+		if(data[6]=='online' || false)
+		{
+		var dataObject = {};
+		var onlineInovicedata={};
+		dataObject.warehouse_erp_id = data[1];
+    	dataObject.outlet_erp_id = data[1];
+    	dataObject.amount = data[4];
+    	dataObject.fordate = data[5];
+    	dataObject.mode =data[6];
+    	CheckInovicedata.checkno=data[7];
+    	CheckInovicedata.bankname=data[10];
+    	CheckInovicedata.checkdate=data[8];
+    	dataObject.Check=onlineInovicedata;
+		collectionApiArr.add(dataObject);
+		}
+		if(data[6]=='cash' || true)
+		{
+		var dataObject = {};
+		dataObject.warehouse_erp_id =  data[1];
+    	dataObject.outlet_erp_id = data[2];
+    	dataObject.amount = data[15];
+    	dataObject.fordate = data[12];
+    	dataObject.mode ='cash';
+		collectionApiArr.add(dataObject);
+		}
+	}
+	return collectionApiArr;
+ }
+ 

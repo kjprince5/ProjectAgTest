@@ -1,0 +1,21 @@
+	function converter(holder, myCode) {
+	var schemeMasterArr = [];
+	for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {
+		var obj = myCode.configs['0'].values['2'].Response.schemedetail[key].Scheme;
+		var schemeMaster = {};
+		
+		schemeMaster.Scheme_Code = obj.erp_id;
+		schemeMaster.Scheme_Description = obj.name;
+		schemeMaster.From_Date = obj.startdatetime.split(" ")[0];
+		schemeMaster.To_Date = obj.enddatetime.split(" ")[0];
+		
+		if (obj.forquantity > 0 && obj.discountpercent > 0) {
+			schemeMaster.Benefit_Type = "PER";
+		} else if (obj.forquantity > 0 && obj.free_skus.length > 0) {
+			schemeMaster.Benefit_Type = "QTY";
+		} else if(obj.foramount > 0 && obj.saverupee > 0) {
+			schemeMaster.Benefit_Type = "Value";
+		} 
+		schemeMaster.IsProrated = "slab";schemeMaster.Flag = obj.active;schemeMasterArr.push(schemeMaster);}return JSON.stringify(schemeMasterArr);
+ }
+ 

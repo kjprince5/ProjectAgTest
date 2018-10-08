@@ -1,0 +1,22 @@
+function converter(holder, myCode) {
+	var channelMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Data.length; i++) {
+		
+		var data = myCode.configs['0'].values['2'].Data[i]
+		for (j = 0; j < data.forms.length; j++) {
+			
+			for (k = 0; k < data.forms[j].formStructure[0].settings.en._checkButtonArrayDefault.length; k++) {
+				for (l = 0; l < data.forms[j].formStructure[1].settings.en._checkButtonArrayDefault.length; l++) {
+				
+					var channelMaster = {};
+					channelMaster.Level1_Name = data.outletTypeName;
+					channelMaster.Level2_Name = data.forms[j].formStructure[0].settings.en._checkButtonArrayDefault[k];
+					channelMaster.Level3_Name = data.forms[j].formStructure[1].settings.en._checkButtonArrayDefault[l];
+					
+			    	channelMasterArr.push(channelMaster);
+			    }
+	    	}
+	    }
+	}
+	return JSON.stringify(channelMasterArr);
+ }

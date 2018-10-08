@@ -1,0 +1,46 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        
+	        if( myCode['env:Body'][0].OutputParameters[0].P_VMASTER_DET_TBL.size()==0)
+	        return null;
+	                    
+	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_VMASTER_DET_TBL[0].P_VMASTER_DET_TBL_ITEM;
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i].SUPPLIER_NUMBER[0]] === undefined) {
+		                parentDict[myCode[i].SUPPLIER_NUMBER[0]] = [];
+		                 var headerObject={};
+						headerObject["SUPPLIER_NUMBER"]=myCode[i].SUPPLIER_NUMBER;
+						headerObject["SUPPLIER_NAME"]=myCode[i].SUPPLIER_NAME;
+						headerObject["REGISTRY_ID"]=myCode[i].REGISTRY_ID;;
+						headerObject["COUNTRY"]=myCode[i].COUNTRY;
+						headerObject["ADDRESS_LINE_1"]=myCode[i].ADDRESS_LINE_1;
+						headerObject["ADDRESS_LINE_2"]=myCode[i].ADDRESS_LINE_2;
+						headerObject["CITY"]=myCode[i].CITY;
+						headerObject["STATE"]=myCode[i].STATE;
+						headerObject["POSTAL_CODE"]=myCode[i].POSTAL_CODE;
+						headerObject["SUPPLIER_SITE_NAME"]=myCode[i].SUPPLIER_SITE_NAME;
+						headerObject["STATUS"]=myCode[i].STATUS;
+						headerObject["PHONE_NUMBER"]=myCode[i].PHONE_NUMBER;
+						headerObject["FAX_AREA_CODE"]=myCode[i].FAX_AREA_CODE;
+						headerObject["FAX_NUMBER"]=myCode[i].FAX_NUMBER;
+						headerObject["EMAIL_ADDRESS"]=myCode[i].EMAIL_ADDRESS;
+						headerObject["FIRST_NAME"]=myCode[i].FIRST_NAME;
+						headerObject["LAST_NAME"]=myCode[i].LAST_NAME;
+						headerObject["VENDOR_TYPE"]=myCode[i].VENDOR_TYPE;
+						headerObject["ADDRESS_LINE3"]=myCode[i].ADDRESS_LINE3;
+						headerObject["ORGANIZATION_CODE"]=myCode[i].ORGANIZATION_CODE;
+		                parentDict[myCode[i].SUPPLIER_NUMBER[0]].header=headerObject;
+		            }
+		            
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }
+	    
+	    
+

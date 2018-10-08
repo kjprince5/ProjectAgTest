@@ -1,0 +1,9 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<Sales>
+	<#list configs['1'].currentResponse  as curRes>
+	<Sale> 
+		<invoiceid>${curRes[0]}</invoiceid> 
+	</Sale>
+	</#list>
+</Sales>

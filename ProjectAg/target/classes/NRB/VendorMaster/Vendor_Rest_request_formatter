@@ -1,0 +1,39 @@
+xml_data=<?xml version="1.0" encoding="utf-8"?>
+<LgfData>
+  <Header>
+    <DocumentVersion>8.0.0</DocumentVersion>
+    <OriginSystem>abc</OriginSystem>
+    <ClientEnvCode>qa</ClientEnvCode>
+    <ParentCompanyCode>QAMASTERCOM</ParentCompanyCode>
+    <Entity>vendor</Entity>
+    <TimeStamp>2017-05-11T12:12:12</TimeStamp>
+    <MessageId>msg123</MessageId>
+  </Header>
+  <ListOfVendors>
+    <vendor>
+      <company_code>NRBBEARINGS</company_code>
+      <vendor_code>${(configs['1'].currentResponse.header.SUPPLIER_NUMBER[0])!""}</vendor_code>
+      <name>${(configs['1'].currentResponse.header.SUPPLIER_NAME[0])!""}</name>
+      <address_1>${(configs['1'].currentResponse.header.ADDRESS_LINE_1[0])!""}</address_1>
+      <address_2>${(configs['1'].currentResponse.header.ADDRESS_LINE_2[0])!""}</address_2>
+      <address_3>${(configs['1'].currentResponse.header.ADDRESS_LINE3[0])!""}</address_3>
+      <locality>${(configs['1'].currentResponse.header.SUPPLIER_SITE_NAME[0])!""}</locality>
+      <city>${(configs['1'].currentResponse.header.CITY[0])!""}</city>
+      <state>${(configs['1'].currentResponse.header.STATE[0])!""}</state>
+      <zip>${(configs['1'].currentResponse.header.POSTAL_CODE[0])!""}</zip>
+      <country>${(configs['1'].currentResponse.header.COUNTRY[0])!""}</country>
+      <phone_nbr>${(configs['1'].currentResponse.header.PHONE_NUMBER[0])!""}</phone_nbr>
+      <email>${(configs['1'].currentResponse.header.EMAIL_ADDRESS[0])!""}</email>
+      <contact>${(configs['1'].currentResponse.header.PHONE_NUMBER[0])!""}</contact>
+      <action_code>CREATE</action_code>
+      <univ_id_1></univ_id_1>
+      <cust_field_1>${(configs['1'].currentResponse.header.VENDOR_TYPE[0])!""}</cust_field_1>
+      <cust_field_2>${(configs['1'].currentResponse.header.FAX_AREA_CODE[0])!""}</cust_field_2>
+      <cust_field_3>${(configs['1'].currentResponse.header.FAX_NUMBER[0])!""}</cust_field_3>
+      <cust_field_4>${(configs['1'].currentResponse.header.FIRST_NAME[0])!""}</cust_field_4>
+      <cust_field_5>${(configs['1'].currentResponse.header.LAST_NAME[0])!""}</cust_field_5>
+      <reception_percent_level></reception_percent_level>
+      <create_asn_on_po_intf></create_asn_on_po_intf>
+    </vendor>
+  </ListOfVendors>
+</LgfData>

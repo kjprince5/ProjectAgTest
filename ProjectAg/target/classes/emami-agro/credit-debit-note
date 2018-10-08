@@ -1,0 +1,13 @@
+[{"Cdnote":{"outlet_erp_id":"${configs['1'].currentResponse[1]}",
+  "warehouse_erp_id":"${configs['1'].currentResponse[5]}",
+  "amount":"${configs['1'].currentResponse[3]}",
+  "comment":"${configs['1'].currentResponse[7]}",
+  "invoiceid":"${configs['1'].currentResponse[4]}",
+  <#assign type=configs['1'].currentResponse[2]!"null" />
+  <#if type == 'H'>
+  "type":"CREDIT"
+</#if>
+   <#if type == 'S'>
+  "type":"DEBIT"
+</#if> 
+  }}]

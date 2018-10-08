@@ -1,0 +1,4 @@
+<Sale> 
+<invoiceid>${configs['1'].currentResponse.INVOICE_NUMBER}</invoiceid>
+<isActive>0</isActive>
+</Sale>

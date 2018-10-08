@@ -1,0 +1,40 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		            if (parentDict[myCode[i][4]+"_"+myCode[i][6]] === undefined) {
+		                parentDict[myCode[i][4]+"_"+myCode[i][6]] = [];
+		                var object={};
+		                object.outlet_erp_id=myCode[i][4];
+		                object.orderNumber=myCode[i][6];
+		                object.invoiceNumber=myCode[i][7];
+		                object.billDate=myCode[i][9];
+		                object.fromoutletid=myCode[i][19];
+		                object.mode='Cash';
+		                parentDict[myCode[i][4]+"_"+myCode[i][6]].main =object;
+		                parentDict[myCode[i][4]+"_"+myCode[i][6]].paymentDetails=new ArrayList();
+		            }
+		            var paymentDetail={};
+	                paymentDetail.deliveryChallan=myCode[i][18];
+	                paymentDetail.sapSkuCode=myCode[i][23];
+	                paymentDetail.quantity=myCode[i][26];
+	                paymentDetail.unit=myCode[i][27];
+	                paymentDetail.unitpriceextax=myCode[i][28];
+	                paymentDetail.discountperunit=myCode[i][45];
+	                paymentDetail.schemediscountperunit=myCode[i][46];
+	                paymentDetail.cgstPercentage=myCode[i][60];
+	                paymentDetail.cgstValue=myCode[i][61];
+	                paymentDetail.sgstPercentage=myCode[i][62];
+	                paymentDetail.sgstValue=myCode[i][63];
+	                paymentDetail.igstPercentage=myCode[i][64];
+	                paymentDetail.igstValue=myCode[i][65];
+	                paymentDetail.ugstPercentage=myCode[i][66];
+	                paymentDetail.ugstValue=myCode[i][67];
+		            parentDict[myCode[i][4]+"_"+myCode[i][6]].paymentDetails.add(paymentDetail);
+	        }
+	        var object = new ArrayList();
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }

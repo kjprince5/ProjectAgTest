@@ -1,0 +1,99 @@
+	function converter(holder, myCode) {
+	var targetMasterArr = [];
+	for (var key in 	myCode.configs['0'].values['2'].Targets) {
+		var obj = myCode.configs['0'].values['2'].Targets[key];
+		
+		
+		if (obj.uniqueskuperaccounts) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "DAYS";
+			targetMaster.Target = obj.uniqueskuperaccounts;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.totalcalls) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+		    targetMaster.Target_Type = "CALLS";
+			targetMaster.Target = obj.totalcalls;
+			targetMasterArr.push(targetMaster);
+			}
+				
+		if (obj.percentproductivecall) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "ECALL";
+			targetMaster.Target = obj.percentproductivecall;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.newoutlets) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "NEWOUTLET";
+			targetMaster.Target = obj.newoutlets;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.amount) {
+			var targetMaster = {};
+			
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "SV";
+			targetMaster.Target = obj.amount;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.lpsc) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "MBO";
+			targetMaster.Target = obj.lpsc;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.dropsize) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "VOL";
+			targetMaster.Target = obj.dropsize;
+			targetMasterArr.push(targetMaster);
+			}
+		if (obj.tlsd) {
+			var targetMaster = {};
+		
+			targetMaster.Distributor_Code = "";
+			targetMaster.SalesRepresentative_Code = obj.user_id;
+			targetMaster.Month_Start_Date = obj.startdate;
+			targetMaster.Month_End_Date = obj.enddate;
+			targetMaster.Target_Type = "TLS";
+			targetMaster.Target = obj.tlsd;
+			targetMasterArr.push(targetMaster);
+			}
+	}
+	return JSON.stringify(targetMasterArr);
+ }
+ 

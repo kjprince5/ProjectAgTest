@@ -1,0 +1,33 @@
+
+ function converter(holder, myCode) {
+	var productPriceArr = [];
+	var runAgain = false;
+	if( myCode.configs['0'].values['2'].Response.Result == "true" ) {
+		runAgain = true;
+	}
+	for (i = 0; i < myCode.configs['0'].values['2'].Response.Products.length; i++)
+	 {
+		 myCode.runAgain=true;
+		 var Product = myCode.configs['0'].values['2'].Response.Products[i];
+		 if(Product.Skunit.warehousetype_id==3 || Product.Skunit.warehousetype_id==4)
+		 { var productPrice = {};
+		 productPrice.Distributor_Code = Product.Skunit.warehouse_erpid;
+		 productPrice.Product_Code = Product.Skunit.skucode;
+		 if(Product.Skunit.price == null)
+		 {
+		 productPrice.Product_PTR = 0;
+		 }
+		 else{
+		 productPrice.Product_PTR = parseFloat(Product.Skunit.price).toFixed(4);
+		 }
+		 productPrice.Effective_From = "20/03/2018";	
+		 productPrice.Flag = Product.Skunit.active;
+		 productPriceArr.push(productPrice);
+		 }
+	 }
+	 if(productPriceArr.length == 0 && runAgain) {
+	 return	productPriceArr = "_RUNAGAIN";
+	 }
+	 return JSON.stringify(productPriceArr);
+	 }
+ 

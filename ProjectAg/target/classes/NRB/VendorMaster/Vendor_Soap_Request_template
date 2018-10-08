@@ -1,0 +1,32 @@
+<#setting date_format="yyyy-MM-dd HH:mm:ss"><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:supp="http://xmlns.oracle.com/apps/per/soaprovider/plsql/xxnrb_venmaster_pkg/supp_populate_details/" xmlns:xxn="http://xmlns.oracle.com/apps/per/soaprovider/plsql/xxnrb_venmaster_pkg/">
+   <soapenv:Header>
+      <wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+         <wsse:UsernameToken wsu:Id="UsernameToken-07FFCD08A6423CC80215282787971533">
+            <wsse:Username>NRB</wsse:Username>
+            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">EBS@2018</wsse:Password>
+            <wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">eYO2+Sq9oiA5CgQVKBB+uA==</wsse:Nonce>
+            <wsu:Created>2018-06-06T09:53:17.153Z</wsu:Created>
+         </wsse:UsernameToken>
+      </wsse:Security>
+      <xxn:SOAHeader>
+         <!--Optional:-->
+         <xxn:Responsibility></xxn:Responsibility>
+         <!--Optional:-->
+         <xxn:RespApplication></xxn:RespApplication>
+         <!--Optional:-->
+         <xxn:SecurityGroup></xxn:SecurityGroup>
+         <!--Optional:-->
+         <xxn:NLSLanguage></xxn:NLSLanguage>
+         <!--Optional:-->
+         <xxn:Org_Id></xxn:Org_Id>
+      </xxn:SOAHeader>
+   </soapenv:Header>
+   <soapenv:Body>
+      <supp:InputParameters>
+         <!--Optional:-->
+         <supp:P_FROM_DATE>${lastScheduledStartTime?date}</supp:P_FROM_DATE>
+         <!--Optional:-->
+         <supp:P_TO_DATE>${nextRunTime?date}</supp:P_TO_DATE>
+      </supp:InputParameters>
+   </soapenv:Body>
+</soapenv:Envelope>

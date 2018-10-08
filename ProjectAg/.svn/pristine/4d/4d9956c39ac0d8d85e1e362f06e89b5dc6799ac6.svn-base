@@ -1,0 +1,41 @@
+<#setting date_format="yyyy-MM-dd"><?xml version="1.0" encoding="utf-8"?>
+	<sales>
+	<sale>
+	<payment>
+	<orderid>${configs['1'].currentResponse.main.orderNumber}</orderid>
+	<invoiceid>${configs['1'].currentResponse.main.invoiceNumber}</invoiceid>
+	<outlet_erp_id>${configs['1'].currentResponse.main.outlet_erp_id}</outlet_erp_id>
+	<from_outlet_erp_id>${configs['1'].currentResponse.main.fromoutletid}</from_outlet_erp_id>
+	<mode>${configs['1'].currentResponse.main.mode}</mode>
+	<amount></amount>
+	<fordate>${configs['1'].currentResponse.main.billDate?datetime("dd.MM.yyyy")?date}</fordate>
+	<partialfulfil></partialfulfil>  
+	<variableprecentdiscount></variableprecentdiscount> 
+	</payment>
+	<#list 0..configs['1'].currentResponse.paymentDetails?size-1 as i>
+	<paymentdetail>
+	<skunit_erp_id></skunit_erp_id>
+	<#assign uom=configs['1'].currentResponse.paymentDetails[i].unit>
+	<#assign code=configs['1'].currentResponse.paymentDetails[i].sapSkuCode >
+	<#assign weightOfSku=configs['0'].translatorMap['3'][code].Size.size_value?trim?number>
+<#if uom == 'MT'>
+  <quantity>${configs['1'].currentResponse.paymentDetails[i].quantity?trim?number*1000/weightOfSku}</quantity>
+</#if>
+<#if uom == 'KG'>
+ <quantity>${configs['1'].currentResponse.paymentDetails[i].quantity?trim?number*1000/weightOfSku}</quantity>
+</#if>
+<#if uom == 'MTG'>
+ <quantity>${(configs['1'].currentResponse.paymentDetails[i].quantity?trim?number/1000)*1000/weightOfSku}</quantity>
+</#if>
+	<status>purchased</status>
+	<amount></amount>
+	<gst></gst>
+	<cess></cess>
+	<discountabsolute>${configs['1'].currentResponse.paymentDetails[i].discountperunit}</discountabsolute>
+	<unitPrice>${configs['1'].currentResponse.paymentDetails[i].unitpriceextax?replace("@#$", "")}</unitPrice>
+	<batch_id></batch_id>
+	<schemediscountabsolute>${configs['1'].currentResponse.paymentDetails[i].schemediscountperunit}</schemediscountabsolute>
+	</paymentdetail>
+	</#list>
+	</sale>
+	</sales>

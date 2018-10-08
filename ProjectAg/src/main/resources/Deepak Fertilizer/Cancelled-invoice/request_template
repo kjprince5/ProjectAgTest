@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sale><invoiceid>${configs['1'].currentResponse.INVOICE_ID}</invoiceid>
+</Sale>
+ 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Warehouse>
+	<erp_id>${configs['0'].values['0'][0]}</erp_id>
+	<warehouse_erp_id>${configs['0'].values['0'][1]}</warehouse_erp_id>
+	<zone_id>${configs['0'].values['0'][2]}</zone_id>
+	<name>${configs['0'].values['0'][3]}</name>
+	<address>${configs['0'].values['0'][4]}</address>
+	<state>${configs['0'].values['0'][5]}</state>
+	<city>${configs['0'].values['0'][6]}</city>
+	<state_id>${configs['0'].values['0'][7]}</state_id>
+	<taxno>${configs['0'].values['0'][8]}</taxno>
+	<jurisdiction>${configs['0'].values['0'][9]}</jurisdiction>
+	<tnc>${configs['0'].values['0'][10]}</tnc>
+	<phoneno>${configs['0'].values['0'][11]}</phoneno>
+	<email>${configs['0'].values['0'][12]}</email>
+	<active>${configs['0'].values['0'][13]}</active>
+	<businesstype>${configs['0'].values['0'][14]}</businesstype>
+	<distributiontype>${configs['0'].values['0'][15]}</distributiontype>
+	<area>${configs['0'].values['0'][16]}</area>
+	<areapincode>${configs['0'].values['0'][17]}</areapincode>
+	<suppliercode>${configs['0'].values['0'][18]}</suppliercode>
+	<populationstrata>${configs['0'].values['0'][19]}</populationstrata>
+	<gstinno>${configs['0'].values['0'][20]}</gstinno>
+</Warehouse>

@@ -1,0 +1,55 @@
+package com.valforma.projectag.common.util;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+@Component
+public class EmailParser {
+	Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
+
+	public String parse(String clientCode, String templateName, String emailTempate, Object object) {
+
+		try {
+			StringTemplateLoader stringLoader = new StringTemplateLoader();
+			stringLoader.putTemplate(clientCode + "_" + templateName, emailTempate);
+			cfg.setTemplateLoader(stringLoader);
+			Template template = cfg.getTemplate(clientCode + "_" + templateName);
+			StringWriter stringWriter = new StringWriter();
+			template.process(object, stringWriter);
+			stringWriter.flush();
+			return stringWriter.toString();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static void main(String[] args) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("message", "12345678");
+		// List parsing
+		List<String> countries = new ArrayList<String>();
+		countries.add("India");
+		countries.add("United States");
+		countries.add("Germany");
+		countries.add("France");
+		data.put("countries", countries);
+		EmailParser emailParser = new EmailParser();
+		System.out.println(emailParser.parse("one", "abc", "Hello ${message}", data));
+	}
+
+}

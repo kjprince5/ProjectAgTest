@@ -1,0 +1,98 @@
+package com.valforma.projectag.rest;
+
+import java.security.Principal;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.valforma.projectag.model.Step;
+import com.valforma.projectag.service.ClientService;
+import com.valforma.projectag.service.StepService;
+import com.valforma.valformacommon.common.NotAuthorizedException;
+import com.valforma.valformacommon.common.Response;
+import com.valforma.valformacommon.common.rest.GenericMultiTenantRoleBasedSecuredRest;
+import com.valforma.valformacommon.service.GenericService;
+
+@RestController
+@RequestMapping("{clientCode}/stepRest")
+public class StepRest extends GenericMultiTenantRoleBasedSecuredRest<Step, Step> {
+	
+	public StepRest() {
+	super(Step.class,Step.class);
+	}
+
+	@Autowired
+	StepService stepService;
+
+	@Autowired
+	ClientService clientService;
+
+	@Override
+	public GenericService<Step, Step> getService() {
+		return stepService;
+	}
+
+	@Override
+	public GenericService<Step, Step> getUserService() {
+		return stepService;
+	}
+
+	@Override
+	public String rolePrefix() {
+		return "step";
+	}
+
+	@RequestMapping(value = "/getStepEnums", method = RequestMethod.GET)
+	public @ResponseBody Object getStepType(@PathVariable("clientCode") String clientCode, Principal principal) {
+		Object[] objects = new Object[3];
+		objects[0] = Step.ObjectType.values();
+		objects[1] = Step.Result.values();
+		objects[2] = Step.Type.values();
+		return objects;
+	}
+
+	@RequestMapping(value = "/getStep", method = RequestMethod.GET)
+	public @ResponseBody Object getStep(@PathVariable("clientCode") String clientCode, @ModelAttribute Step t,
+			@RequestParam(value = "firstResult", required = false) int firstResult,
+			@RequestParam(value = "maxResult", required = false) int maxResult, Principal principal) {
+		t.setClientId(clientService.getClientCodeById(clientCode));
+		
+		super.validateAuthorization(clientCode, principal);
+		
+		return getService().getListByCriteria(t,
+				"select step.ID, step.JOB_DETAIL_ID, step.PARENT_ID, step.SUCCESS_KEY, step.SUCCESS_VALUE , step.FAILURE_JOB_DETAIL_ID , step.STEP_TYPE , step.OBJECT_TYPE ,  step.PATH , step.REQUEST_TEMPLATE , step.RESPONSE_TYPE, step.RESULT, step.SEQUENCE, step.SUB_TYPE, step.TYPE, step.HEADER_TEMPLATE, step.RESPONSE_FORMATTER_JS, step.ERROR_FORMATTER_JS, step.LOGGING_ENABLED, step.FAILURE_STEP_ID, step.STEP_CODE, step.UNIQUE_KEY_TEMPLATE, step.DUPLICATE_CHECK_ENABLED from STEP step where 1=1 ",
+				"order by step.ID desc", firstResult, maxResult);
+	}
+
+	@Override
+	@RequestMapping(method = RequestMethod.PUT)
+	public @ResponseBody Response<Step> update(@PathVariable("clientCode") String clientCode,
+			@Valid @RequestBody Step t, Principal principal) {
+		return super.update(clientCode, t, principal);
+	}
+
+	@Override
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody Response<Step> save(@PathVariable("clientCode") String clientCode, @Valid @RequestBody Step t,
+			Principal principal) {
+		return super.save(clientCode, t, principal);
+	}
+
+	@Override
+	@RequestMapping(value = "/count", method = RequestMethod.GET)
+	public @ResponseBody Long count(@PathVariable("clientCode") String clientCode, @ModelAttribute Step t,
+			Principal principal) {
+		t.setClientId(clientService.getClientCodeById(clientCode));
+		return getService().getCount(t, "select count(step.ID) from STEP step where 1=1 ").longValue();
+	}
+
+}

@@ -1,0 +1,45 @@
+<#setting date_format="yyyy-MM-dd">
+<sales>
+  <sale>
+    <payment>
+      <invoiceid>${configs['1'].currentResponse.main[0]}</invoiceid>
+      <outlet_erp_id>${configs['1'].currentResponse.main[2]?number?c}</outlet_erp_id>
+      <from_warehouse_erpid>${configs['1'].currentResponse.main[4]}</from_warehouse_erpid>   
+      <amount>${configs['1'].currentResponse.main[14]?trim}</amount>
+     <#-- <bill_discount>${configs['1'].currentResponse.main[11]}</bill_discount>
+      <bill_discount_type>percent</bill_discount_type>-->
+      <fordate>${configs['1'].currentResponse.main[6]?datetime("yyyyMMdd")?date}</fordate>
+      <mode>Cash</mode>
+      <invoicebillno>${configs['1'].currentResponse.main[0]}</invoicebillno>
+    </payment>
+    <#list 0..configs['1'].currentResponse.skus?size-1 as i>
+    <paymentdetail>
+    <#assign amt_disc = (configs['1'].currentResponse.skus[i][4]?trim?number - configs['1'].currentResponse.skus[i][2]?trim?number)>
+      <skunit_erp_id>${configs['1'].currentResponse.skus[i][0]}</skunit_erp_id>
+      <quantityincases>0</quantityincases>
+      <quantity>${configs['1'].currentResponse.skus[i][1]?trim?number?c}</quantity>
+      <#if configs['1'].currentResponse.skus[i][4]?trim?number == 0 || amt_disc == 0>
+			<discount>0</discount>
+	  <#else>
+      		<discount> ${((configs['1'].currentResponse.skus[i][2]?trim?number+(configs['1'].currentResponse.skus[i][5]?trim?number/amt_disc)*configs['1'].currentResponse.skus[i][2]?trim?number)/configs['1'].currentResponse.skus[i][1]?trim?number)?c}</discount>
+	  </#if>
+      <discount_type>value</discount_type>
+      <actual_discount_type>percent</actual_discount_type>
+      <status>purchased</status>
+      <#if configs['1'].currentResponse.skus[i][4]?trim?number == 0 || amt_disc == 0>
+			<amount>0</amount>
+	  <#else>
+	      <amount>${((configs['1'].currentResponse.skus[i][5]?trim?number+(configs['1'].currentResponse.skus[i][5]?trim?number/amt_disc)*configs['1'].currentResponse.skus[i][2]?trim?number)+configs['1'].currentResponse.skus[i][4]?trim?number)?c}</amount><#--${configs['1'].currentResponse.skus[i][3]?trim-->
+      </#if>
+      <#--<amount>${configs['1'].currentResponse.skus[i][3]?trim}</amount>-->
+      <unitPrice>${configs['1'].currentResponse.skus[i][4]?trim?number/configs['1'].currentResponse.skus[i][1]?trim?number}</unitPrice>
+    </paymentdetail>
+    </#list>
+   <deliveryDetail>
+      <vehicle_id>${configs['1'].currentResponse.main[15]}</vehicle_id>
+      <drivername>${configs['1'].currentResponse.main[16]}</drivername>
+      <drivernumber>${configs['1'].currentResponse.main[17]}</drivernumber>
+   </deliveryDetail>
+  </sale>
+</sales>
+

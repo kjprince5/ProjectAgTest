@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Warehouse>
+	<erp_id>${configs['1'].currentResponse[0]}</erp_id>
+	<warehouse_erp_id>${configs['1'].currentResponse[1]}</warehouse_erp_id>
+	<zone_id>${configs['1'].currentResponse[2]}</zone_id>
+	<name>${configs['1'].currentResponse[3]}</name>
+	<address>${configs['1'].currentResponse[4]}</address>
+	<state>${configs['1'].currentResponse[5]}</state>
+	<city>${configs['1'].currentResponse[6]}</city>
+	<state_id>${configs['1'].currentResponse[7]}</state_id>
+	<taxno>${configs['1'].currentResponse[8]}</taxno>
+	<jurisdiction>${configs['1'].currentResponse[9]}</jurisdiction>
+	<tnc>${configs['1'].currentResponse[10]}</tnc>
+	<phoneno>${configs['1'].currentResponse[11]}</phoneno>
+	<email>${configs['1'].currentResponse[12]}</email>
+	<active>${configs['1'].currentResponse[13]}</active>
+	<businesstype>${configs['1'].currentResponse[14]}</businesstype>
+	<distributiontype>${configs['1'].currentResponse[15]}</distributiontype>
+	<area>${configs['1'].currentResponse[16]}</area>
+	<areapincode>${configs['1'].currentResponse[17]}</areapincode>
+	<suppliercode>${configs['1'].currentResponse[18]}</suppliercode>
+	<populationstrata>${configs['1'].currentResponse[19]}</populationstrata>
+	<gstinno>${configs['1'].currentResponse[20]}</gstinno>
+</Warehouse>

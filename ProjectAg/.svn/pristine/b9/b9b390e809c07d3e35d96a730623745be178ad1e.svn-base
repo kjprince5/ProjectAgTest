@@ -1,0 +1,29 @@
+	<Outlets>
+	<Outlet>
+	<erp_id>${configs['1'].currentResponse.erp_id}</erp_id>
+	<name>${configs['1'].currentResponse.name}</name>
+	<address></address>
+	<city_id></city_id>
+	<state_id></state_id>
+	<email>${configs['1'].currentResponse.email}</email>
+	<type>outlet</type>
+	<gstinno>${configs['1'].currentResponse.gstinno}</gstinno>
+	<cstno></cstno>
+	<ownername></ownername>
+	<ownermobile>${configs['1'].currentResponse.ownermobile}</ownermobile>
+	<pin>${configs['1'].currentResponse.pin}</pin>
+	<balance></balance>
+	<isdistributor></isdistributor>
+	<area_erpid>Sales Office</area_erpid> 
+	<code>${configs['1'].currentResponse.code}</code>
+	<taxno></taxno>
+	<custom>
+	<customerName_SingleLineText></customerName_SingleLineText>
+	<customerCode_SingleLineText></customerCode_SingleLineText>
+	<customerAddress_SingleLineText></customerAddress_SingleLineText>
+	<customerMobileNo_SingleLineText></customerMobileNo_SingleLineText>
+	<approved>1</approved>
+	</custom>
+
+	</Outlet>
+	</Outlets>

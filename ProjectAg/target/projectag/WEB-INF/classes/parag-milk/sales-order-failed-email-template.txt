@@ -1,0 +1,27 @@
+<html> 
+	<head> 
+		<style> 
+			#customers { font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; border-collapse: collapse;  width: 100%;}  
+			#customers td, #customers th {  border: 1px solid #ddd;  padding: 8px; } 
+			#customers tr:nth-child(even){background-color: #f2f2f2;} 
+			#customers tr:hover {background-color: #ddd;} 
+			#customers th { padding-top: 12px;   padding-bottom: 12px;  text-align: left;   background-color: #4CAF50;  color: white; } 
+		</style> 
+	</head> 
+	<body> 
+		Hello There,   These are the failed jobs from ${startDate} to ${endDate}. 
+		<div style="padding-top:20px;"> 
+			<table id='customers'> 
+				<tr> <th> Invoice Id </th> <th> Step Id </th> <th> Reason </th> <th> File Name </th></tr>
+				<#list integrationInstanceFailureList  as integrationInstanceFailure>
+					<tr>
+						<td> ${integrationInstanceFailure.configObjectJsonObject.configs['1'].currentResponse.main[0]} </td>
+						<td> ${integrationInstanceFailure.stepId} </td> 
+						<td> ${integrationInstanceFailure.errorResponse} </td> 
+						<td> ${integrationInstanceFailure.configObjectJsonObject.configs['1'].currentResponse.main[29]} </td> 
+					</tr>
+				</#list>
+			</table>
+		</div>
+	</body>
+</html>

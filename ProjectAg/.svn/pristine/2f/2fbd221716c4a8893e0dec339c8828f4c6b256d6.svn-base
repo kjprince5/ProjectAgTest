@@ -1,0 +1,33 @@
+<#setting date_format="yyyy-MM-dd">
+<sales>
+  <sale>
+    <payment>
+      <invoiceid>${configs['1'].currentResponse.main[0]}</invoiceid>
+      <outlet_erp_id>${configs['1'].currentResponse.main[1]}</outlet_erp_id>
+      <from_warehouse_erpid>${configs['1'].currentResponse.main[2]}</from_warehouse_erpid>
+      <mode>credit</mode>
+      <amount>${configs['1'].currentResponse.main[5]}</amount>
+      <bill_discount>${configs['1'].currentResponse.main[6]}</bill_discount>
+      <bill_discount_type>${configs['1'].currentResponse.main[7]}</bill_discount_type>
+      <fordate>${configs['1'].currentResponse.main[8]?datetime("yyyyMMdd")?date}</fordate>
+	  <invoicebillno>${configs['1'].currentResponse.main[0]}</invoicebillno>
+    </payment>
+	<#list 0..configs['1'].currentResponse.skus?size-1 as i>
+		<paymentdetail>
+		  <skunit_erp_id>${configs['1'].translatorMap['1'].SKU_SAP_BIZOM[configs['1'].currentResponse.skus[i][0]]}</skunit_erp_id>
+		  <quantityincases>0</quantityincases>
+		  <quantity>${configs['1'].currentResponse.skus[i][1]}</quantity>
+		  <discount>${configs['1'].currentResponse.skus[i][2]}</discount>
+		  <discount_type>${configs['1'].currentResponse.skus[i][6]}</discount_type>
+		  <status>${configs['1'].currentResponse.skus[i][7]}</status>     
+		  <amount>${configs['1'].currentResponse.skus[i][3]}</amount>
+		  <unitPrice>${configs['1'].currentResponse.skus[i][4]}</unitPrice>
+		</paymentdetail> 
+	</#list>
+   <deliveryDetail>
+      <vehicle_id>${configs['1'].currentResponse.main[19]}</vehicle_id>
+      <drivername>${configs['1'].currentResponse.main[20]}</drivername>
+      <drivernumber>${configs['1'].currentResponse.main[21]}</drivernumber>
+   </deliveryDetail>
+  </sale>
+</sales>

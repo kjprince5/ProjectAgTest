@@ -1,0 +1,49 @@
+	function converter(holder, myCode) {
+	        
+	        var ArrayList = Java.type('java.util.ArrayList');
+			 var list = new ArrayList();
+	          
+	          for(var i = 0; i < myCode.length; i++)
+	        {
+	        var innerList = new ArrayList();
+	        for(var j =0 ; j< myCode[i].length;j++)	
+	        {
+	        innerList.add(myCode[i][j]);
+	        }
+	        var array=myCode[i][13].split("_");
+	        innerList.add(array[array.length-2]);
+	        list.add(innerList);
+	        }
+	        return list;
+	    }
+	    
+function converter(holder, myCode) {
+	        
+	        var ArrayList = Java.type('java.util.ArrayList');
+			 var list = new ArrayList();
+	          var innerList = new ArrayList();
+	          for(var i = 0; i < myCode.length; i++)
+	        {
+	        	if((i==0 || i%1000!=0) && i%1000<1000)
+	        	{
+	        	innerList.add(myCode[i]);
+	        	}
+	        	
+	        	if(i!=0 && i%1000==0)
+	        		{
+	        		list.add(innerList);
+	        		var innerList = new ArrayList();
+	        		innerList.add(myCode[i]);
+	        		}
+	        }
+	        
+	        if(myCode.length-1 % 1000 != 0)
+	        	{
+	        	list.add(innerList);
+	        	var innerList = new ArrayList();
+	        	}
+	        
+	        
+	        
+	        return list;
+	    }

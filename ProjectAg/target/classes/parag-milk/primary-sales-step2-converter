@@ -1,0 +1,27 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        if (myCode[i][24] != 'S1') {
+		            if (parentDict[myCode[i][0]] === undefined) {
+		                parentDict[myCode[i][0]] = [];
+		                parentDict[myCode[i][0]].main=myCode[i];
+		                parentDict[myCode[i][0]].skus=new ArrayList();
+		                
+		            }
+		            var skus = new ArrayList();
+		            skus.add(myCode[i][7]);//sku or material code
+		            skus.add(myCode[i][8])//quantity
+		            skus.add(myCode[i][11]);//discount
+		            skus.add(myCode[i][14]);//amount
+		            skus.add(myCode[i][10]);//unit price/ basic rate
+		            skus.add(myCode[i][13]);//gst amount
+		            parentDict[myCode[i][0]].skus.add(skus);
+		        }
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+}

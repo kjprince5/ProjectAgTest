@@ -1,0 +1,27 @@
+<#setting date_format="yyyy-MM-dd">[
+{
+"warehouse_erp_id":"${configs['0'].values['0'].warehouse_erp_id}",
+"outlet_erp_id":"${configs['0'].values['0'].outlet_erp_id}",
+"amount":"${configs['0'].values['0'].amount?replace("@#$", "")}",
+"fordate":"${configs['0'].values['0'].fordate?datetime("dd.MM.yyyy")?date}",
+"mode":"${configs['0'].values['0'].mode}"
+<#assign mode=configs['0'].values['0'].mode!"null" />
+<#if mode == 'check'>
+  ,"Check":{
+			"checkno":"${configs['0'].values['0'].Check.checkno}",
+			"bankname":"${configs['0'].values['0'].Check.bankname}",
+			"checkdate":"${configs['0'].values['0'].Check.checkdate}"
+		}
+</#if>
+<#if mode == 'online'>
+  ,"Onlinetransaction":{
+					"transactionid":"${configs['0'].values['0'].Onlinetransaction.checkno}",
+					"bankname":"${configs['0'].values['0'].Onlinetransaction.bankname}",
+					"date":"${configs['0'].values['0'].Onlinetransaction.checkdate}"
+					}
+		
+</#if>
+		
+
+}
+]

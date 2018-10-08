@@ -1,0 +1,39 @@
+<#setting date_format="MM/dd/yyyy">
+<#assign currentDate = .now>
+Current Date : ${currentDate?date}<br>
+<#assign numberOfDays = .now?string('dd')?number?long>
+<#assign numberOfDays = numberOfDays-1>
+<#assign timeInMillisecond = (1000 * 60 * 60 * 24 * numberOfDays) >
+<#assign aDate = currentDate?long - timeInMillisecond?long>
+<#assign Diff = aDate?long>
+<#assign startDateOfMonth = Diff?number_to_date>
+<#assign aMonth = .now?string("M")>
+<#assign aNewMonth = aMonth?number>
+<#assign aYear = .now?string("yyyy")>
+<#assign aDay = 0>
+<#assign aNewDate = "" + (aNewMonth + 1) + "/" + aDay + "/" + aYear>
+<#assign aLastDay = aNewDate?date>
+<#setting date_format="yyyy-MM-dd">
+<br>Date before ${numberOfDays} Days : ${startDateOfMonth?date}<br>
+${aLastDay?date}<br/>https://api.bizom.in/beats/getpjpmasters?responsetype=json&fromdate=${startDateOfMonth?date}&todate=${aLastDay?date}&startseq=0&endseq=500datatype=fordate
+
+
+
+
+
+
+<#setting date_format=\"MM/dd/yyyy\">\r\n" + 
+			"  <#assign currentDate = .now>\r\n" + 
+			"  <#assign numberOfDays = .now?string('dd')?number?long>\r\n" + 
+			"  <#assign numberOfDays = numberOfDays-1>\r\n" + 
+			"  <#assign timeInMillisecond = (1000 * 60 * 60 * 24 * numberOfDays) >\r\n" + 
+			"  <#assign aDate = currentDate?long - timeInMillisecond?long>\r\n" + 
+			"  <#assign Diff = aDate?long>\r\n" + 
+			"  <#assign startDateOfMonth = Diff?number_to_date>\r\n" + 
+			"  <#assign aMonth = .now?string(\"M\")>\r\n" + 
+			"  <#assign aNewMonth = aMonth?number>\r\n" + 
+			"  <#assign aYear = .now?string(\"yyyy\")>\r\n" + 
+			"  <#assign aDay = 0>\r\n" + 
+			"  <#assign aNewDate = \"\" + (aNewMonth + 1) + \"/\" + aDay + \"/\" + aYear>\r\n" + 
+			"  <#assign aLastDay = aNewDate?date>\r\n" + 
+			"  <#setting date_format=\"yyyy-MM-dd\">https://api.bizom.in/beats/getpjpmasters?responsetype=json&fromdate=${startDateOfMonth?date}&todate=${aLastDay?date}&startseq=0&endseq=500datatype=fordate

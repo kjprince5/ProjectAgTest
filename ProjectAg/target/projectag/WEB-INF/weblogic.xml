@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<weblogic-web-app
+xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd
+http://xmlns.oracle.com/weblogic/weblogic-web-app
+http://xmlns.oracle.com/weblogic/weblogic-web-app/1.2/weblogic-web-app.xsd">
+
+     <weblogic-version>10.3.6</weblogic-version>
+     <context-root>projectag</context-root>
+		
+     <container-descriptor>
+	  <prefer-web-inf-classes>true</prefer-web-inf-classes>
+        <!-- <prefer-application-packages>
+				<package-name>com.sun.el.*</package-name>
+				<package-name>javax.el.*</package-name>
+				<package-name>com.valforma.*</package-name>
+				<package-name>org.springframework.*</package-name>
+                <package-name>javax.persistence.*</package-name>
+		<package-name>javax.persistence.spi.*</package-name>
+         </prefer-application-packages>
+		 <prefer-application-resources>
+				<resource-name>com.sun.el.*</resource-name>
+				<resource-name>javax.el.*</resource-name>
+				<resource-name>com.valforma.*</resource-name>
+				<resource-name>org.springframework.*</resource-name>
+               			 <resource-name>javax.persistence.*</resource-name>
+            			 <resource-name>javax.persistence.spi.*</resource-name>
+         </prefer-application-resources>-->
+
+
+     </container-descriptor>
+</weblogic-web-app>

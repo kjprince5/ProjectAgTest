@@ -1,0 +1,27 @@
+package com.valforma.projectag.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.valforma.projectag.dao.IntegrationInstanceFailureDao;
+import com.valforma.projectag.model.IntegrationInstanceFailure;
+import com.valforma.valformacommon.dao.AbstractDAO;
+import com.valforma.valformacommon.service.GenericServiceImpl;
+
+@Service
+@Transactional
+public class IntegrationInstanceFailureServiceImpl
+		extends GenericServiceImpl<IntegrationInstanceFailure, IntegrationInstanceFailure>
+		implements IntegrationInstanceFailureService {
+
+	@Autowired
+	IntegrationInstanceFailureDao instanceFailureDao;
+
+	@Override
+	public AbstractDAO<IntegrationInstanceFailure, IntegrationInstanceFailure> getDAO() {
+		return instanceFailureDao;
+
+	}
+
+}

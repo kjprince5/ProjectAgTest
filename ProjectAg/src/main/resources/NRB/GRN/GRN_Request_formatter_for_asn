@@ -1,0 +1,70 @@
+	function converter(holder, myCode) { 
+				        var parentDict = {}; 
+				        var ArrayList = Java.type('java.util.ArrayList'); 
+				        for (i = 0; i < myCode.length; i++) { 
+				            if (parentDict[myCode[i][58]] === undefined) { 
+				                parentDict[myCode[i][58]] = []; 
+				                 var headerObject={};
+		                headerObject["LOAD_NUMBER"]=myCode[i][69];
+						headerObject["SHIPMENT_NUMBER"]=myCode[i][58];
+						headerObject["RECEIPT_DATE"]=myCode[i][28];
+						headerObject["SHIPPED_DATE"]=myCode[i][61];
+						headerObject["VENDOR_NAME"]=myCode[i][63];
+						headerObject["RECEIVED_BY"]=myCode[i][33];
+						headerObject["CUST_SHORT_TEST_1"]=myCode[i][34];
+						headerObject["CUST_SHORT_TEST_2"]=myCode[i][35];
+						headerObject["CUST_SHORT_TEST_3"]=myCode[i][36];
+						headerObject["CUST_FIELD_1"]=myCode[i][29];
+						headerObject["CUST_DATE_2"]=myCode[i][27];
+						headerObject["CUST_FIELD_3"]=myCode[i][31];
+						headerObject["CUST_FIELD_4"]=myCode[i][32];
+						headerObject["CUST_SHORT_TEST_6"]=myCode[i][39];
+						headerObject["CUST_SHORT_TEST_7"]=myCode[i][40];
+						headerObject["CUST_SHORT_TEST_8"]=myCode[i][41];
+						headerObject["CUST_SHORT_TEST_9"]=myCode[i][42];
+						headerObject["CUST_SHORT_TEST_10"]=myCode[i][43];
+						headerObject["CUST_SHORT_TEST_11"]=myCode[i][44];
+						headerObject["CUST_SHORT_TEST_12"]=myCode[i][45];
+						headerObject["FACILITY"]=myCode[i][50];
+						headerObject["COMPANY"]=myCode[i][20];
+						headerObject["CUST_FIELD_2"]=myCode[i][30];
+						headerObject["CUST_DATE_3"]=myCode[i][28];
+						headerObject["CUST_NUMBER_1"]=myCode[i][46];
+						headerObject["CUST_NUMBER_2"]=myCode[i][47];
+						headerObject["CUST_SHORT_TEST_4"]=myCode[i][37];
+						headerObject["CUST_NUMBER_3"]=myCode[i][48];
+						headerObject["CUST_NUMBER_4"]=myCode[i][49];
+						headerObject["CUST_SHORT_TEST_5"]=myCode[i][38];
+		                parentDict[myCode[i][58]].header=headerObject;
+				                
+				                
+				                
+				                
+				                parentDict[myCode[i][58]].asnLines=new ArrayList(); 
+				                 
+				            } 
+				            var item = new ArrayList();
+		            var obj={};
+		            obj["RECEIVED_QUANTITY"]=myCode[i][17];
+					obj["ITEM_CODE"]=myCode[i][71];
+					obj["DESCRIPTION"]=myCode[i][72];
+					obj["CUST_SHOW_TEXT_1"]=myCode[i][6];
+					obj["FACILITY_CODE"]=myCode[i][50];
+					obj["PO_NUMBER"]=myCode[i][70];
+					obj["COMPANY"]=myCode[i][20];
+					obj["SHIPPED_QUANTITY"]=myCode[i][18];
+					obj["BATCH_NUMBER"]=myCode[i][0];
+					obj["ATTRIBUTE_A"]=myCode[i][1];
+					
+							
+		            
+		            item.add(obj);
+		           
+		            parentDict[myCode[i][58]].asnLines.add(item);
+				        } 
+				        var object = new ArrayList();; 
+				        for (var key in parentDict) { 
+				            object.add(parentDict[key]); 
+				        } 
+				        return object; 
+				    }

@@ -1,0 +1,13 @@
+function converter(holder, myCode) {
+	var regionMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].data.length; i++) {
+		
+		var Region = myCode.configs['0'].values['2'].data[i]
+		var regionMaster = {};
+		regionMaster.Region_Code = Region.id;
+		regionMaster.Region_Name = Region.name;
+		regionMaster.Flag = Region.is_active;
+    	regionMasterArr.push(regionMaster);
+	}
+	return JSON.stringify(regionMasterArr);
+ }

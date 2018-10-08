@@ -1,0 +1,8 @@
+<#setting date_format="MM/dd/yyyy">
+<#assign aMonth = .now?string("M")>
+<#assign aNewMonth = aMonth?number>
+<#assign aYear = .now?string("yyyy")>
+<#assign aDay = 0>
+<#assign aNewDate = "" + (aNewMonth + 1) + "/" + aDay + "/" + aYear>
+<#assign aLastDay = aNewDate?date>
+${aLastDay?date}<br/>

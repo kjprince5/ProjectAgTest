@@ -1,0 +1,23 @@
+ function converter(holder, myCode) {
+     var schemeProductArr = [];
+     for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {
+         var obj = myCode.configs['0'].values['2'].Response.schemedetail[key].Scheme;
+
+         if (!(obj.schemetype == "qps" || obj.type == "cash_sku")) {
+             for (i = 0; i < obj.for_skucode.length; i++) {
+                 if (obj.active == 1) {
+                     var schemeProduct = {};
+                     schemeProduct.Scheme_Code = obj.erp_id;
+                     schemeProduct.Product_Code = obj.for_skucode[i];
+                     schemeProduct.Flag = obj.active;
+                     schemeProductArr.push(schemeProduct);
+                 }
+             }
+         }
+     }
+	 if(schemeProductArr.length == 0 && myCode.configs['0'].values['2'].Response.Result)
+	 {
+	 return schemeProductArr = "_RUNAGAIN";
+	 }
+     return JSON.stringify(schemeProductArr);
+ }

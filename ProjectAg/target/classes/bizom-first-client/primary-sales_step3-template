@@ -1,0 +1,16 @@
+{
+<#setting date_format="yyyy-MM-dd">
+"data[url]":["/payments/addMultiplePrimarySales"]
+<#list 0..configs['0'].values['2']?size-1 as i>
+,"data[postparams][Sales][${i}][Payment][warehouse_id]":["${configs['0'].values['2'][i?string].warehouseId}"]
+,"data[postparams][Sales][${i}][Payment][mode]":["credit"]
+,"data[postparams][Sales][${i}][Payment][fordate]":["${configs['0'].values['2'][i?string].forDate?datetime("MM/dd/yyyy")?date}"]
+,"data[postparams][Sales][${i}][Payment][billno]":["${configs['0'].values['2'][i?string].billNo}"]
+,"data[postparams][Sales][${i}][Payment][invoiceid]":["${configs['0'].values['2'][i?string].invoiceId}"]
+<#list 0..configs['0'].values['2'][i?string].paymentDetails?size-1 as k>
+,"data[postparams][Sales][${i}][Paymentdetail][${k?string}][skunit_id]":["${configs['0'].values['2'][i?string].paymentDetails[k?string].skuId}"]
+,"data[postparams][Sales][${i}][Paymentdetail][${k?string}][quantity]":["${configs['0'].values['2'][i?string].paymentDetails[k?string].quantity}"]
+</#list>
+</#list>
+}
+ 

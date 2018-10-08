@@ -1,0 +1,55 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        
+	        if( myCode['env:Body'][0].OutputParameters[0].P_ITEM_DETAILS_TBL.size()==0)
+	        return null;
+	                    
+	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_ITEM_DETAILS_TBL[0].P_ITEM_DETAILS_TBL_ITEM;
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i].ITEM[0]] === undefined) {
+		                parentDict[myCode[i].ITEM[0]] = [];
+		                 var outputBeforeHyphen =[]; 
+					     var outputafterHyphen =[]; 
+					     var arr = myCode[i].ITEM[0].split("-"); 
+					     for (var j = 0, len = arr[0].length; j < len; j += 1) { 
+			    		 outputBeforeHyphen.push(arr[0].charAt(j)); 
+						 } 
+						
+		                
+		                var headerObject={};
+						
+						headerObject["LIST_PRICE"]=myCode[i].LIST_PRICE;;
+						headerObject["PART_A"]=[outputBeforeHyphen[0]+outputBeforeHyphen[1]];
+						headerObject["PART_B"]=[outputBeforeHyphen[2]+outputBeforeHyphen[3]];
+						headerObject["PART_C"]=[outputBeforeHyphen[4]+outputBeforeHyphen[5]+outputBeforeHyphen[6]];
+						headerObject["PART_D"]=[arr[1]];
+						headerObject["ITEM"]=myCode[i].ITEM;
+						headerObject["ORGANIZATION_CODE"]=myCode[i].ORGANIZATION_CODE;
+						headerObject["HAZARDOUS_MATERIAL"]=myCode[i].HAZARDOUS_MATERIAL;
+						headerObject["UNIT_LENGTH"]=myCode[i].UNIT_LENGTH;
+						headerObject["ORGANIZATION_NAME"]=myCode[i].ORGANIZATION_NAME;
+						headerObject["SHELF_LIFE_DAYS"]=myCode[i].SHELF_LIFE_DAYS;
+						headerObject["UNIT_WIDTH"]=myCode[i].UNIT_WIDTH;
+						headerObject["UNIT_VOLUME"]=myCode[i].UNIT_VOLUME;
+						headerObject["UNIT_HEIGHT"]=myCode[i].UNIT_HEIGHT;
+						headerObject["DESCRIPTION"]=myCode[i].DESCRIPTION;
+						headerObject["CATEGORY"]=myCode[i].CATEGORY;
+						headerObject["UNIT_WEIGHT"]=myCode[i].UNIT_WEIGHT;
+						headerObject["LONG_DESCRIPTION"]=myCode[i].LONG_DESCRIPTION;
+						headerObject["LOTCONTROL"]=myCode[i].LOTCONTROL;
+						headerObject["PRIMARY_UNIT_OF_MEASURE"]=myCode[i].PRIMARY_UNIT_OF_MEASURE;
+		                parentDict[myCode[i].ITEM[0]].header=headerObject;
+		            }
+		            
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }
+	    
+	    
+

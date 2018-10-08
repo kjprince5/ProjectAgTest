@@ -1,0 +1,229 @@
+package com.valforma.projectag.helper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.valforma.projectag.common.util.AGUtil;
+import com.valforma.projectag.common.util.JobException;
+import com.valforma.projectag.common.util.JsonUtil;
+import com.valforma.projectag.contracts.ObjectHolder;
+import com.valforma.projectag.model.IntegrationInstanceFailure;
+import com.valforma.projectag.model.JobDetail;
+import com.valforma.projectag.model.Step;
+import com.valforma.projectag.model.StepHistory;
+import com.valforma.projectag.model.StepSettings;
+import com.valforma.projectag.model.StepHistory.Status;
+import com.valforma.projectag.service.IntegrationInstanceFailureService;
+import com.valforma.projectag.service.StepHistoryService;
+import com.valforma.projectag.service.StepSettingsService;
+
+@Component
+public class FileStepProcessor implements StepProcessor {
+
+	@Autowired
+	NashornHelper nashornHelper;
+
+	@Autowired
+	Map<String, FileHandler> fileHandlers = new HashMap<>();
+
+	@Autowired
+	StepSettingsService stepSettingsService;
+
+	@Autowired
+	AGUtil agUtil;
+	
+	@Autowired
+	ClientTranslationHelper clientTranslationHelper;
+	
+	@Autowired
+	IntegrationInstanceFailureService integrationInstanceFailureService;
+	
+	@Autowired
+	StepHistoryService stepHistoryService;
+	
+	ObjectMapper mapper = new ObjectMapper();
+
+	@Override
+	public Object processStep(JobDetail jobDetail, Step step, ObjectHolder config, Integer level) throws JobException {
+		System.out.println(JsonUtil.toString(config));
+		
+		StepSettings stepSetting = new StepSettings();
+		stepSetting.setStepId(step.getId());
+		stepSetting.setClientId(step.getClientId());
+		List<StepSettings> stepSettingsl = stepSettingsService.getListByCriteria(stepSetting, -1, 0);
+		try {
+			clientTranslationHelper.fillTranslatorObject(step, stepSettingsl, config, level);
+			System.out.println(JsonUtil.toString(config));
+		} catch (TranslatorNotFoundException e) {
+			if (step.isLoggingEnabled()) {
+				System.out.println(JsonUtil.toString(config));
+				saveStepHistory(step, config, "", e.getMessage() + " : " + e.getTranslatorCode(),
+						"", Status.FAILURE);
+				failOverHandler(jobDetail, true, step, config, null,
+						e.getMessage() + " : " + e.getTranslatorCode(), level);
+			}
+			return null;
+		}
+		
+		List<StepSettings> stepSettingsList = stepSettingsService.getStepSettings(step.getClientId(), step.getId(),
+				"FOLDER_EMPTY_CONDITION");
+		if (!stepSettingsList.isEmpty()) {
+			StepSettings stepSettings = stepSettingsList.get(0);
+			if (stepSettings.getValue() != null && !stepSettings.getValue().isEmpty()) {
+				if (!agUtil.isThisPathContainsNoFiles(stepSettings.getValue()))
+					return null;
+			}
+		}
+		String[] parameters = step.getPath().split("\\|");
+		/*
+		 * String user = "root"; String password = "V@!f0rm@@eVoma"; String host
+		 * = "172.16.1.19"; int port = 22; String baseDir = "/var/www/html";
+		 * String newDir = "new"; String processedDir = "processed";
+		 */
+
+		String user = parameters[0];
+		String password = parameters[1];
+		String host = parameters[2];
+		int port = new Integer(parameters[3]);
+		String baseDir = parameters[4];
+		String newDir = parameters[5];
+		String processedDir = parameters[6];
+		String ppkPath = null;
+		if (parameters.length >= 8) {
+			ppkPath = parameters[7];
+		}
+		List<Object[]> objects = fileHandlers.get(step.getSubType() + "Handler").handle(step, user, host, port,
+				password, baseDir, newDir, processedDir, config, level, ppkPath);
+
+		if (objects == null || objects.isEmpty())
+			return null;
+		System.out.println(JsonUtil.toString(objects));
+		if (step.getResponseFormatterJs() != null && !step.getResponseFormatterJs().isEmpty()) {
+			return nashornHelper.process(step.getResponseFormatterJs(), config, objects);
+		}
+		return objects;
+
+	}
+
+	public List<Object[]> readBooksFromCSV(String fileName) throws JobException {
+		List<Object[]> books = new ArrayList<>();
+		Path pathToFile = Paths.get(fileName);
+		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
+
+			String line = br.readLine();
+			while (line != null) {
+
+				books.add(line.split(","));
+				line = br.readLine();
+			}
+		} catch (IOException ioe) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ioe.printStackTrace(pw);
+			throw new JobException("Error From Reading CSV", sw.toString());
+		}
+		return books;
+	}
+	
+	
+	private void saveStepHistory(Step step, ObjectHolder objectHolder, Object request, Object response, Object header,
+			StepHistory.Status status)  {
+		StepHistory stepHistory = new StepHistory();
+		//stepHistory.setConfigObjectJson(JsonUtil.toString(objectHolder));
+		
+		stepHistory.setRequest(JsonUtil.toString(request));
+		if(request!=null)
+		{
+			stepHistory.setRequest(request.toString());
+		}
+		
+		stepHistory.setResponse(JsonUtil.toString(response));
+		stepHistory.setHeader(JsonUtil.toString(header));
+		stepHistory.setStatus(status);
+		stepHistory.setCreationDate(new Date());
+		stepHistory.setLastUpdateDate(new Date());
+		stepHistory.setStepId(step.getId());
+		stepHistory.setClientId(step.getClientId());
+		stepHistory.setJobId(step.getJobDetailId());
+		stepHistory.setUniqueKeyTemplate(step.getUniqueKeyTemplate());
+		stepHistoryService.save(stepHistory);
+	}
+	
+	
+	private void failOverHandler(JobDetail jobDetail, boolean serverSideExcepiton, Step step, ObjectHolder objectHolder,
+			Object repsonseBody, String e, Integer level) throws JobException {
+
+		if (jobDetail.isRetryEnabled()) {
+			IntegrationInstanceFailure instanceFailureHistory = new IntegrationInstanceFailure();
+			instanceFailureHistory.setJobDetailId(jobDetail.getId());
+			Object nextStepRequest = repsonseBody;
+
+			if (step.getErrorFormatterJs() != null && !step.getErrorFormatterJs().isEmpty()) {
+				nextStepRequest = nashornHelper.process(step.getErrorFormatterJs(), objectHolder, repsonseBody);
+			}
+			objectHolder.getConfigs().get("" + level).getValues().put("" + step.getSequence(), nextStepRequest);
+
+			String configObjectJson = null;
+			String nextStepRequestJson = null;
+			try {
+				configObjectJson = mapper.writeValueAsString(objectHolder);
+				nextStepRequestJson = mapper.writeValueAsString(nextStepRequest);
+				mapper.writeValueAsString(repsonseBody);
+			} catch (JsonProcessingException e1) {
+				e1.printStackTrace();
+			}
+
+			if (objectHolder.getConfigs().get("0").getValues().containsKey("integrationInstanceFailureId")) {
+				instanceFailureHistory = integrationInstanceFailureService.get((BigInteger) objectHolder.getConfigs()
+						.get("0").getValues().get("integrationInstanceFailureId"));
+				try {
+					if (nextStepRequestJson.equals(
+							mapper.writeValueAsString(objectHolder.getConfigs().get("0").getValues().get("0")))) {
+						instanceFailureHistory.setNoOfRetries(instanceFailureHistory.getNoOfRetries() + 1);
+					} else {
+						instanceFailureHistory.setNoOfRetries(0);
+					}
+				} catch (JsonProcessingException e1) {
+					e1.printStackTrace();
+				}
+			}
+			instanceFailureHistory.setClientId(step.getClientId());
+			instanceFailureHistory.setNextRequestJson(nextStepRequestJson);
+			if (!(serverSideExcepiton
+					&& objectHolder.getConfigs().get("0").getValues().containsKey("integrationInstanceFailureId"))) {
+				instanceFailureHistory.setNextRequestJson(nextStepRequestJson);
+			}
+
+			//instanceFailureHistory.setConfigObjectJson(configObjectJson);
+			instanceFailureHistory.setCreationDate(new Date());
+			instanceFailureHistory.setLastUpdateDate(new Date());
+			instanceFailureHistory.setErrorResponse(e);
+			instanceFailureHistory.setStepId(step.getId());
+			integrationInstanceFailureService.update(instanceFailureHistory);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+}

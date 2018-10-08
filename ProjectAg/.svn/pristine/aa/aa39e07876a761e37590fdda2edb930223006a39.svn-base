@@ -1,0 +1,3316 @@
+package com.valforma.projectag.helper;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.script.Bindings;
+import javax.script.Invocable;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Component
+public class NashornHelper {
+
+	static List<String[]> list = new ArrayList<>();
+	{
+		list.add(new String[] { "1233444", "442", "3","fordate", "1", "2" });
+		//list.add(new String[] { "1233444", "442", "3","fordate", "2", "2" });
+		//list.add(new String[] { "1233445", "442", "3","fordate", "2", "2" });
+	}
+    static String  three="function converter(holder, object)\r\n" + 
+    		"{\r\n" + 
+    		"return holder.configs['1'].currentResponse;\r\n" + 
+    		"}";
+    static String javascript = "function converter(holder, input) {" + "return  input.configs['0'].values['2'].Outlets[0]" + "} ";
+	static String javascript2="	function converter(holder, myCode) {\r\n" + 
+			"	        var parentDict = {};\r\n" + 
+			"	        var ArrayList = Java.type('java.util.ArrayList');\r\n" + 
+			"	        for (i = 0; i < myCode.length; i++) {\r\n" + 
+			"	            if (parentDict[myCode[i][0]] === undefined) {\r\n" + 
+			"	                parentDict[myCode[i][0]] = [];\r\n" + 
+			"	                parentDict[myCode[i][0]].main=myCode[i];\r\n" + 
+			"	                parentDict[myCode[i][0]].skus=new ArrayList();\r\n" + 
+			"	                \r\n" + 
+			"	            }\r\n" + 
+			"	            var skus = [];\r\n" + 
+			"	            skus[0]=myCode[i][7];//sku\r\n" + 
+			"	            skus[1]=myCode[i][8];// quantity\r\n" + 
+			"	            skus[2]=myCode[i][11];// discount\r\n" + 
+			"	            skus[3]=myCode[i][14];//amount\r\n" + 
+			"	            skus[4]=myCode[i][10];//unit price\r\n" + 
+			"	            parentDict[myCode[i][0]].skus.add(skus);\r\n" + 
+			"	        }\r\n" + 
+			"	        var object = new ArrayList();;\r\n" + 
+			"	        for (var key in parentDict) {\r\n" + 
+			"	            object.add(parentDict[key]);\r\n" + 
+			"	        }\r\n" + 
+			"	        return object;\r\n" + 
+			"	    }";
+	static String javascript3="	function converter(holder, myCode) {\r\n" + 
+			"	        var parentDict = {};\r\n" + 
+			"myCode= myCode['env:Body'][0].OutputParameters[0].P_PO_DETAILS_TBL[0].P_PO_DETAILS_TBL_ITEM;" +
+			"	        var ArrayList = Java.type('java.util.ArrayList');\r\n" + 
+			"	        for (i = 0; i < myCode.length; i++) {\r\n" + 
+			"		        //if (myCode[i][28] != 'S1') {\r\n" + 
+			"		            if (parentDict[myCode[i].PO_NUMBER] === undefined) {\r\n" + 
+			"		                parentDict[myCode[i].PO_NUMBER] = [];\r\n" + 
+			"		                parentDict[myCode[i].PO_NUMBER].main=myCode[i];\r\n" + 
+			"		                parentDict[myCode[i].PO_NUMBER].itemList=new ArrayList();\r\n" + 
+			"		                \r\n" + 
+			"		            }\r\n" + 
+			"		            var item = new ArrayList();\r\n" + 
+			"		            item.add(myCode[i].CONTACT);\r\n" + 
+			"		            parentDict[myCode[i].PO_NUMBER].itemList.add(item);\r\n" + 
+			"		        //}\r\n" + 
+			"	        }\r\n" + 
+			"	        var object = new ArrayList();;\r\n" + 
+			"	        for (var key in parentDict) {\r\n" + 
+			"		            object.add(parentDict[key]);\r\n" + 
+			"	        }\r\n" + 
+			"	        return object;\r\n" + 
+			"	    }\r\n" + 
+			"	    ";
+
+	static String javascript4="	function converter(holder, myCode) {\r\n" + 
+			"	        var parentDict = {};\r\n" + 
+			"	        \r\n" + 
+			"	        if( myCode['env:Body'][0].OutputParameters[0].P_PRDNOTE_DETAILS_TBL.size()==0)\r\n" + 
+			"	        return null;\r\n" + 
+			"	                    \r\n" + 
+			"	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_PRDNOTE_DETAILS_TBL[0].P_PRDNOTE_DETAILS_TBL_ITEM;\r\n" + 
+			"	        var ArrayList = Java.type('java.util.ArrayList');\r\n" + 
+			"	        for (i = 0; i < myCode.length; i++) {\r\n" + 
+			"		        \r\n" + 
+			"		            if (parentDict[myCode[i].JOB_NAME[0]] === undefined) {\r\n" + 
+			"		                parentDict[myCode[i].JOB_NAME[0]] = [];\r\n" + 
+			"		                var headerObject={};\r\n" + 
+			"						headerObject[\"BUSINESS_UNIT\"]=myCode[i].BUSINESS_UNIT;\r\n" + 
+			"						headerObject[\"JOB_NAME\"]=myCode[i].JOB_NAME;\r\n" + 
+			"						headerObject[\"DATE_LAST_MOVED\"]=myCode[i].DATE_LAST_MOVED;\r\n" + 
+			"		                parentDict[myCode[i].JOB_NAME[0]].header=headerObject;\r\n" + 
+			"		                parentDict[myCode[i].JOB_NAME[0]].itemList=new ArrayList();\r\n" + 
+			"		                \r\n" + 
+			"		            }\r\n" + 
+			"		            var item = new ArrayList();\r\n" + 
+			"		            var obj={};\r\n" + 
+			"		            obj[\"BUSINESS_UNIT\"]=myCode[i].BUSINESS_UNIT;\r\n" + 
+			"					obj[\"ORGANIZATION_ID\"]=myCode[i].ORGANIZATION_ID;\r\n" + 
+			"					obj[\"WIP_ENTITY_ID\"]=myCode[i].WIP_ENTITY_ID;\r\n" + 
+			"					obj[\"ITEM_CODE\"]=myCode[i].ITEM_CODE;\r\n" + 
+			"					obj[\"DESCRIPTION\"]=myCode[i].DESCRIPTION;\r\n" + 
+			"					obj[\"DATE_LAST_MOVED\"]=myCode[i].DATE_LAST_MOVED;\r\n" + 
+			"					obj[\"OPERATION_SEQ_NUM\"]=myCode[i].OPERATION_SEQ_NUM;\r\n" + 
+			"					obj[\"AVAILABLE_QUANTITY\"]=myCode[i].AVAILABLE_QUANTITY;\r\n" + 
+			"					\r\n" + 
+			"							\r\n" + 
+			"		            \r\n" + 
+			"		            item.add(obj);\r\n" + 
+			"		           \r\n" + 
+			"		            parentDict[myCode[i].JOB_NAME[0]].itemList.add(item);\r\n" + 
+			"		     \r\n" + 
+			"	        }\r\n" + 
+			"	        var object = new ArrayList();;\r\n" + 
+			"	        for (var key in parentDict) {\r\n" + 
+			"		            object.add(parentDict[key]);\r\n" + 
+			"	        }\r\n" + 
+			"	        return object;\r\n" + 
+			"	    }\r\n" + 
+			"	    \r\n" + 
+			"	    \r\n" + 
+			"\r\n" + 
+			"";
+	static String javascript5="function converter(holder, myCode) {\r\n" + 
+			"	var schemeProductArr = [];\r\n" + 
+			"	for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {\r\n" + 
+			"		\r\n" + 
+			"		var obj = myCode.configs['0'].values['2'].Response.schemedetail[key].Scheme;\r\n" + 
+			"		\r\n" + 
+			"		if (obj.forquantity > 0 && obj.free_skus.length > 0) {\r\n" + 
+			"			for (i = 0; i < obj.free_skus.length; i++) {\r\n" + 
+			"		if(obj.active==1 && obj.schemetype!=\"qps\")\r\n" + 
+			"		{\r\n" + 
+			"		var freeSkunitIdObj = obj.free_skus[i].free_skunit_id;\r\n" + 
+			"				var schemeProduct = {};\r\n" + 
+			"				schemeProduct.Scheme_Code = obj.erp_id;\r\n" + 
+			"				schemeProduct.Slab_Description = obj.name;\r\n" + 
+			"				for (var newKey in freeSkunitIdObj) {\r\n" + 
+			"					schemeProduct.Free_Product_Code = freeSkunitIdObj[newKey].skucode // N\r\n" + 
+			"					break;\r\n" + 
+			"				}\r\n" + 
+			"				schemeProduct.Free_Product_UOM = \"PIECE\"; //\r\n" + 
+			"				schemeProduct.Free_Qty = obj.free_skus[i].freequantity;\r\n" + 
+			"				schemeProduct.Flag = obj.active;\r\n" + 
+			"	    		schemeProductArr.push(schemeProduct);\r\n" + 
+			"		}\r\n" + 
+			"				\r\n" + 
+			"    		\r\n" + 
+			"    		}\r\n" + 
+			"		}	\r\n" + 
+			"	}\r\n" + 
+			"	return JSON.stringify(schemeProductArr);\r\n" + 
+			" }";
+	Object process(String code, Object configObject, Object object) {
+		ScriptEngineManager engineManager = new ScriptEngineManager(null);
+		ScriptEngine engine = engineManager.getEngineByName("nashorn");
+		Bindings bindings = new SimpleBindings();
+		bindings.put("context", object);
+		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+		Object result = null;
+		try {
+			engine.eval(code);
+			result = ((Invocable) engine).invokeFunction("converter", configObject,object);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (ScriptException e) {
+			e.printStackTrace();
+		}
+
+		/*System.out.println(result);*/
+		return result;
+	}
+
+	public static void main(String[] args) throws IOException {
+		String resonseBody1="[[\"8111005405\",\"0002000019\",\"0002000019\",\"20\",\"1101\",\"MNSD06\",\"20180219\",\"90200097_290\",\" 1600.000\",\"JAR\",\" 348000\",\" 0.00\",\"JOCG 6JOSG 6\",\" 41760.00\",\" 389760.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 100.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 348000.00\",\" 41760.00\",\" 389760.00\"]]";
+	
+		String responseBody1="[[\"\\\"\\\",\\\"\\\",\\\"12/13/2017\\\",\\\"12/13/2017 5:00:00 AM\\\",\\\"12/13/2017 5:12:05 AM\\\",\\\"50.00\\\",\\\"\\\",\\\"\\\",\\\"11\\\",\\\"IBLPN01\\\",\\\"100.00\\\",\\\"12/13/2017\\\",\\\"12/13/2017 5:00:00 AM\\\",\\\"12/13/2017 5:43:42 AM\\\",\\\"TESTUSER01\\\",\\\"50.00\\\",\\\"\\\",\\\"0.10\\\",\\\"0.10\\\",\\\"\\\",\\\"JL_COMPY\\\",\\\"201\\\",\\\"12/13/2017\\\",\\\"12/13/2017 5:00:00 AM\\\",\\\"12/13/2017 5:10:42 AM\\\",\\\"50.00\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"\\\",\\\"0\\\",\\\"0\\\",\\\"0\\\",\\\"0\\\",\\\"P04\\\",\\\"3\\\",\\\"11\\\",\\\"1602\\\",\\\"12/13/2017\\\",\\\"12/13/2017 2:44:22 PM\\\",\\\"TESTUSER01\\\",\\\"50.00\\\",\\\"ASN01\\\",\\\"\\\",\\\"\\\",\\\"12/13/2017\\\",\\\"Verified\\\",\\\"\\\",\\\"12/13/2017\\\",\\\"12/13/2017 2:00:00 PM\\\",\\\"12/13/2017 2:44:22 PM\\\",\\\"50.00\\\",\\\"TESTUSER01\\\",\\\"LASN01\\\",\\\"\\\",\\\"91-20-011-0023\\\",\\\"G.I. 24 SWG Ducting Material supply with fitting\\\"\",\"JL_COMPY_P04_BLR_Support_IB Shipment- GRN_5_30_2018_15_52_20_263.csv\",\"2\"]]";
+		String resonseBody="{\r\n" + 
+				"	\"env:Header\":[], \r\n" + 
+				"	\"env:Body\":[\r\n" + 
+				"			{\r\n" + 
+				"			\"OutputParameters\":[\r\n" + 
+				"								{\r\n" + 
+				"									\"OUT_REQUEST_STATUS\":[\"FAILURE\"], \r\n" + 
+				"									\"P_PO_DETAILS_TBL\":[]\r\n" + 
+				"								}\r\n" + 
+				"							]\r\n" + 
+				"			}\r\n" + 
+				"		]\r\n" + 
+				"}";
+		
+		
+		
+		String objectHolder	="{\"jobRunningId\":\"72a37aaf-8e92-4ee6-a071-1b49d911aab9\",\"currentDate\":1530264217802,\"lastScheduledStartTime\":1530261628000,\"nextRunTime\":1530261633000,\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"translatorMap\":{},\"values\":{\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"6b7e587c7ec26417c1eb39457aed1cbdc00a8898\",\"client\":\"NWIzNWZhOWE5NmQ3MWFl\",\"client_secret\":\"c15503379c5c69bcdf1f877a2fa1bb297cbe3462\",\"refresh_token\":\"1db922b7f82c09334deb3923c06673f42323ce5b\",\"user_id\":\"207661\",\"username\":\"exl.sfaint\",\"password\":\"6f3e2f47cba2e28239c42083ca11299544188c98\",\"domain\":\"https://stagingeal-exl.bizom.in/\",\"cookie\":\"CAKEPHP=vkgp7rvn92si60f2df0q24eif4\",\"role_id\":\"1\",\"role_name\":\"ADMIN\",\"role_specific_id\":\"778\"},\"2\":[[\"9110\",\"105728\",\"\",\"\",\"    53025.00\",\"20180608\",\"check\",\"123456789987456\",\"20180608\",\"AS09\",\"Allahabad Bank CC A/C 50079999439\",\"\",\"20180608\",\"Distributor_ledger_20180613_170414.CSV\",\"1\"],[\"9110\",\"105728\",\"\",\"\",\"    53025.00\",\"20180608\",\"check\",\"\",\"20180608\",\"AS09\",\"Allahabad Bank CC A/C 50079999439\",\"\",\"20180608\",\"Distributor_ledger_20180613_170414.CSV\",\"2\"]]}},\"1\":{\"parent\":null,\"currentResponse\":[\"9110\",\"105728\",\"\",\"\",\"    53025.00\",\"20180608\",\"check\",\"123456789987456\",\"20180608\",\"AS09\",\"Allahabad Bank CC A/C 50079999439\",\"\",\"20180608\",\"Distributor_ledger_20180613_170414.CSV\",\"1\"],\"translatorMap\":{},\"values\":{}}},\"dryRun\":false}";
+		String resonseBody3="{  \r\n" + 
+				"  \"jobRunningId\":\"7997464c-5cc3-4887-a277-878aa18e5174\",\r\n" + 
+				"  \"runAgain\":true,\r\n" + 
+				"  \"startSequence\":\"87087\",\r\n" + 
+				"  \"endSequence\":\"88087\",\r\n" + 
+				"  \"batchSize\":\"1001\",\r\n" + 
+				"  \"currentDate\":1531394625588,\r\n" + 
+				"  \"lastScheduledStartTime\":1531326600000,\r\n" + 
+				"  \"nextRunTime\":1531394580000,\r\n" + 
+				"  \"configs\":{  \r\n" + 
+				"    \"0\":{  \r\n" + 
+				"      \"parent\":null,\r\n" + 
+				"      \"currentResponse\":null,\r\n" + 
+				"      \"translatorMap\":{  \r\n" + 
+				"\r\n" + 
+				"      },\r\n" + 
+				"      \"values\":{  \r\n" + 
+				"        \"1\":{  \r\n" + 
+				"          \"Result\":\"true\",\r\n" + 
+				"          \"Reason\":null,\r\n" + 
+				"          \"Token\":\"fd3f8f08b9204a0b6f4ba709f50cdea8ae36e82c\",\r\n" + 
+				"          \"client\":\"NWI0NzNhZWVlM2RlZTkz\",\r\n" + 
+				"          \"client_secret\":\"f6295fa898d558f68188d032b3f121ffd3311284\",\r\n" + 
+				"          \"refresh_token\":\"89e3a930a4fa4b90dff8ebc735de89747dd48948\",\r\n" + 
+				"          \"user_id\":\"207157\",\r\n" + 
+				"          \"username\":\"exl.valforma\",\r\n" + 
+				"          \"password\":\"f2511b248ffc90dd08099a7d3679c6f9a2e042b9\",\r\n" + 
+				"          \"domain\":\"https://eal-exl.bizom.in/\",\r\n" + 
+				"          \"cookie\":\"CAKEPHP=d7j3i12mc4avddcj4klm9u7ij6\",\r\n" + 
+				"          \"role_id\":\"1\",\r\n" + 
+				"          \"role_name\":\"ADMIN\",\r\n" + 
+				"          \"role_specific_id\":\"778\"\r\n" + 
+				"        },\r\n" + 
+				"        \"2\":{  \r\n" + 
+				"  \"Response\":{  \r\n" + 
+				"    \"Result\":true,\r\n" + 
+				"    \"Reason\":\"Data found\",\r\n" + 
+				"    \"schemedetail\":{  \r\n" + 
+				"      \"32\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"32\",\r\n" + 
+				"          \"name\":\"Buy SBO get ETP free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-06-19 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"30\",\r\n" + 
+				"          \"erp_id\":\"SBO-ETP\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"0\",\r\n" + 
+				"          \"created\":\"2018-06-19 17:23:23\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:50:12\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"1.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"1\",\r\n" + 
+				"              \"max_quantity\":\"1\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"40\":{  \r\n" + 
+				"                  \"skunit_id\":\"40\",\r\n" + 
+				"                  \"name\":\"Everest Turmeric Powder\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTPROMO1003\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"40\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"37\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"37\",\r\n" + 
+				"          \"name\":\"Buy SBO, RBO, KGMO 5 Ltr jar Get Zandu Spray free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-01 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"36\",\r\n" + 
+				"          \"erp_id\":\"5 Ltr jar Promo\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1012\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTKGMO1013\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"0\",\r\n" + 
+				"          \"created\":\"2018-07-01 16:18:42\",\r\n" + 
+				"          \"modified\":\"2018-07-02 10:52:09\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"1.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"1\",\r\n" + 
+				"              \"max_quantity\":\"1\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"45\":{  \r\n" + 
+				"                  \"skunit_id\":\"45\",\r\n" + 
+				"                  \"name\":\"Zandu Spray\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTPROMO1004\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"45\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"38\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"38\",\r\n" + 
+				"          \"name\":\"Buy RBO 1 Ltr Pch Get Plastic Container Free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-01 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"35\",\r\n" + 
+				"          \"erp_id\":\"RBO Container Free\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"0\",\r\n" + 
+				"          \"created\":\"2018-07-01 16:19:48\",\r\n" + 
+				"          \"modified\":\"2018-07-02 10:52:53\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"1.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"1\",\r\n" + 
+				"              \"max_quantity\":\"1\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"49\":{  \r\n" + 
+				"                  \"skunit_id\":\"49\",\r\n" + 
+				"                  \"name\":\"Plastic Container\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTPROMO1005\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"49\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"39\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"39\",\r\n" + 
+				"          \"name\":\"Buy 2 Cases of KGMO, RBO, SFO & Get 1.50% Off\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"66\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(A)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"11\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTRBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"12\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"13\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTRBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"14\",\r\n" + 
+				"              \"name\":\"RBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"28\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"29\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"30\",\r\n" + 
+				"              \"name\":\"SFO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSFO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"31\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"32\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"37\",\r\n" + 
+				"              \"name\":\"SFO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSFO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"41\",\r\n" + 
+				"              \"name\":\"RBO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTRBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"RBO 1 ltr Pet\",\r\n" + 
+				"            \"RBO 1 ltr Pch\",\r\n" + 
+				"            \"RBO 5 ltr Jar\",\r\n" + 
+				"            \"RBO 500 ml Pch\",\r\n" + 
+				"            \"SFO 1 ltr Pet\",\r\n" + 
+				"            \"SFO 1 ltr Pch\",\r\n" + 
+				"            \"SFO 5 ltr Jar\",\r\n" + 
+				"            \"SFO 500 ml Pch\",\r\n" + 
+				"            \"SFO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"SFO 15 ltr Jar \",\r\n" + 
+				"            \"RBO Rs 10\\/-\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTRBO1001\",\r\n" + 
+				"            \"HTRBO1002\",\r\n" + 
+				"            \"HTRBO1003\",\r\n" + 
+				"            \"HTRBO1004\",\r\n" + 
+				"            \"HTSFO1001\",\r\n" + 
+				"            \"HTSFO1002\",\r\n" + 
+				"            \"HTSFO1003\",\r\n" + 
+				"            \"HTSFO1004\",\r\n" + 
+				"            \"HTSFO1005\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTSFO1006\",\r\n" + 
+				"            \"HTRBO1005\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTKGMO1013\",\r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:18:55\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"1.50\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"2.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"40\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"40\",\r\n" + 
+				"          \"name\":\"Buy 6 Cases of KGMO, RBO, SFO & Get 2% Off\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"66\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(A)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"11\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTRBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"12\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"13\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTRBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"14\",\r\n" + 
+				"              \"name\":\"RBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"28\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"29\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"30\",\r\n" + 
+				"              \"name\":\"SFO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSFO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"31\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"32\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"37\",\r\n" + 
+				"              \"name\":\"SFO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSFO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"41\",\r\n" + 
+				"              \"name\":\"RBO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTRBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"RBO 1 ltr Pet\",\r\n" + 
+				"            \"RBO 1 ltr Pch\",\r\n" + 
+				"            \"RBO 5 ltr Jar\",\r\n" + 
+				"            \"RBO 500 ml Pch\",\r\n" + 
+				"            \"SFO 1 ltr Pet\",\r\n" + 
+				"            \"SFO 1 ltr Pch\",\r\n" + 
+				"            \"SFO 5 ltr Jar\",\r\n" + 
+				"            \"SFO 500 ml Pch\",\r\n" + 
+				"            \"SFO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"SFO 15 ltr Jar \",\r\n" + 
+				"            \"RBO Rs 10\\/-\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTRBO1001\",\r\n" + 
+				"            \"HTRBO1002\",\r\n" + 
+				"            \"HTRBO1003\",\r\n" + 
+				"            \"HTRBO1004\",\r\n" + 
+				"            \"HTSFO1001\",\r\n" + 
+				"            \"HTSFO1002\",\r\n" + 
+				"            \"HTSFO1003\",\r\n" + 
+				"            \"HTSFO1004\",\r\n" + 
+				"            \"HTSFO1005\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTSFO1006\",\r\n" + 
+				"            \"HTRBO1005\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTKGMO1013\",\r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:20:16\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"2.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"6.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"41\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"41\",\r\n" + 
+				"          \"name\":\"Buy 15 Cases of KGMO, RBO, SFO & Get 2.50% Off\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"66\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(A)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"11\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTRBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"12\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"13\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTRBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"14\",\r\n" + 
+				"              \"name\":\"RBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"28\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"29\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"30\",\r\n" + 
+				"              \"name\":\"SFO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSFO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"31\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"32\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"37\",\r\n" + 
+				"              \"name\":\"SFO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSFO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"41\",\r\n" + 
+				"              \"name\":\"RBO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTRBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"RBO 1 ltr Pet\",\r\n" + 
+				"            \"RBO 1 ltr Pch\",\r\n" + 
+				"            \"RBO 5 ltr Jar\",\r\n" + 
+				"            \"RBO 500 ml Pch\",\r\n" + 
+				"            \"SFO 1 ltr Pet\",\r\n" + 
+				"            \"SFO 1 ltr Pch\",\r\n" + 
+				"            \"SFO 5 ltr Jar\",\r\n" + 
+				"            \"SFO 500 ml Pch\",\r\n" + 
+				"            \"SFO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"SFO 15 ltr Jar \",\r\n" + 
+				"            \"RBO Rs 10\\/-\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTRBO1001\",\r\n" + 
+				"            \"HTRBO1002\",\r\n" + 
+				"            \"HTRBO1003\",\r\n" + 
+				"            \"HTRBO1004\",\r\n" + 
+				"            \"HTSFO1001\",\r\n" + 
+				"            \"HTSFO1002\",\r\n" + 
+				"            \"HTSFO1003\",\r\n" + 
+				"            \"HTSFO1004\",\r\n" + 
+				"            \"HTSFO1005\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTSFO1006\",\r\n" + 
+				"            \"HTRBO1005\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTKGMO1013\",\r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:21:19\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"2.50\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"15.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"42\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"42\",\r\n" + 
+				"          \"name\":\"Buy SBO 2 Cases & above Get 2% Discount\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"67\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(B)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTSBO1012\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:22:16\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"2.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"2.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"43\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"43\",\r\n" + 
+				"          \"name\":\"Buy SBO 6 case to 11 Cases Get 2 pc SBO 1ltr Pch Free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"68\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(G)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTSBO1012\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:24:12\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"6.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"2\",\r\n" + 
+				"              \"max_quantity\":\"2\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"20\":{  \r\n" + 
+				"                  \"skunit_id\":\"20\",\r\n" + 
+				"                  \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTSBO1002\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"20\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"44\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"44\",\r\n" + 
+				"          \"name\":\"Buy SBO 12 case to 17 Cases Get 5 pc SBO 1ltr Pch Free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"68\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(G)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTSBO1012\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:25:20\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"12.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"5\",\r\n" + 
+				"              \"max_quantity\":\"5\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"20\":{  \r\n" + 
+				"                  \"skunit_id\":\"20\",\r\n" + 
+				"                  \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTSBO1002\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"20\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"45\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"45\",\r\n" + 
+				"          \"name\":\"Buy SBO 18 case to 24 Cases Get 7 pc SBO 1ltr Pch Free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"68\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(G)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTSBO1012\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:26:22\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"18.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"7\",\r\n" + 
+				"              \"max_quantity\":\"7\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"20\":{  \r\n" + 
+				"                  \"skunit_id\":\"20\",\r\n" + 
+				"                  \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTSBO1002\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"20\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"46\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"46\",\r\n" + 
+				"          \"name\":\"Buy SBO 25 case & Above Get 12 pc SBO 1ltr Pch Free\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"68\",\r\n" + 
+				"          \"erp_id\":\"WB\\u00a0July 18\\u00a0(G)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTSBO1012\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:27:22\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"0.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"25.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"freequantity\":\"12\",\r\n" + 
+				"              \"max_quantity\":\"12\",\r\n" + 
+				"              \"ceiling\":\"0\",\r\n" + 
+				"              \"free_skunit_id\":{  \r\n" + 
+				"                \"20\":{  \r\n" + 
+				"                  \"skunit_id\":\"20\",\r\n" + 
+				"                  \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"                  \"gst\":\"5.00\",\r\n" + 
+				"                  \"cess\":\"0.00\",\r\n" + 
+				"                  \"skucode\":\"HTSBO1002\",\r\n" + 
+				"                  \"batch\":[  \r\n" + 
+				"                    {  \r\n" + 
+				"                      \"Inventory\":{  \r\n" + 
+				"                        \"skunit_id\":\"20\",\r\n" + 
+				"                        \"batch_id\":0,\r\n" + 
+				"                        \"availableinventory\":0\r\n" + 
+				"                      },\r\n" + 
+				"                      \"Batch\":{  \r\n" + 
+				"                        \"expiry_date\":\"9999-12-31\",\r\n" + 
+				"                        \"name\":\"Select All batch\"\r\n" + 
+				"                      }\r\n" + 
+				"                    }\r\n" + 
+				"                  ]\r\n" + 
+				"                }\r\n" + 
+				"              }\r\n" + 
+				"            }\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"47\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"47\",\r\n" + 
+				"          \"name\":\"Buy RBO, SBO, SFO 1 case to 9 case Get 3% Discount\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"69\",\r\n" + 
+				"          \"erp_id\":\"North 1\\u00a0July 18\\u00a0(A)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"11\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTRBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"12\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"13\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTRBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"14\",\r\n" + 
+				"              \"name\":\"RBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"28\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"29\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"30\",\r\n" + 
+				"              \"name\":\"SFO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSFO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"31\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"32\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"37\",\r\n" + 
+				"              \"name\":\"SFO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSFO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"41\",\r\n" + 
+				"              \"name\":\"RBO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTRBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"RBO 1 ltr Pet\",\r\n" + 
+				"            \"RBO 1 ltr Pch\",\r\n" + 
+				"            \"RBO 5 ltr Jar\",\r\n" + 
+				"            \"RBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SFO 1 ltr Pet\",\r\n" + 
+				"            \"SFO 1 ltr Pch\",\r\n" + 
+				"            \"SFO 5 ltr Jar\",\r\n" + 
+				"            \"SFO 500 ml Pch\",\r\n" + 
+				"            \"SFO 500 ml Pet\",\r\n" + 
+				"            \"SFO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"RBO Rs 10\\/-\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTRBO1001\",\r\n" + 
+				"            \"HTRBO1002\",\r\n" + 
+				"            \"HTRBO1003\",\r\n" + 
+				"            \"HTRBO1004\",\r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSFO1001\",\r\n" + 
+				"            \"HTSFO1002\",\r\n" + 
+				"            \"HTSFO1003\",\r\n" + 
+				"            \"HTSFO1004\",\r\n" + 
+				"            \"HTSFO1005\",\r\n" + 
+				"            \"HTSFO1006\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTRBO1005\",\r\n" + 
+				"            \"HTSBO1012\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:28:57\",\r\n" + 
+				"          \"modified\":\"2018-07-07 17:27:09\",\r\n" + 
+				"          \"discountpercent\":\"3.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"1.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"48\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"48\",\r\n" + 
+				"          \"name\":\"Buy RBO, SBO, SFO 10 case & above Get 4% Discount\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"69\",\r\n" + 
+				"          \"erp_id\":\"North 1 July 18 (A)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"11\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTRBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"12\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"13\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTRBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"14\",\r\n" + 
+				"              \"name\":\"RBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTRBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"19\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"20\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"21\",\r\n" + 
+				"              \"name\":\"SBO 15 Kg Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"22\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSBO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"23\",\r\n" + 
+				"              \"name\":\"SBO 15 ltr Tin\",\r\n" + 
+				"              \"skucode\":\"HTSBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"24\",\r\n" + 
+				"              \"name\":\"SBO 200 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"25\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"26\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSBO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"27\",\r\n" + 
+				"              \"name\":\"SBO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSBO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"28\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"29\",\r\n" + 
+				"              \"name\":\"SFO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"30\",\r\n" + 
+				"              \"name\":\"SFO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTSFO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"31\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTSFO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"32\",\r\n" + 
+				"              \"name\":\"SFO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTSFO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"37\",\r\n" + 
+				"              \"name\":\"SFO 15 ltr Jar \",\r\n" + 
+				"              \"skucode\":\"HTSFO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"38\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"39\",\r\n" + 
+				"              \"name\":\"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"41\",\r\n" + 
+				"              \"name\":\"RBO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTRBO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"42\",\r\n" + 
+				"              \"name\":\"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTSBO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"43\",\r\n" + 
+				"              \"name\":\"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"48\",\r\n" + 
+				"              \"name\":\"RBO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTRBO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"RBO 1 ltr Pet\",\r\n" + 
+				"            \"RBO 1 ltr Pch\",\r\n" + 
+				"            \"RBO 5 ltr Jar\",\r\n" + 
+				"            \"RBO 500 ml Pch\",\r\n" + 
+				"            \"SBO 1 ltr Pet\",\r\n" + 
+				"            \"SBO 1 ltr Pch\",\r\n" + 
+				"            \"SBO 15 Kg Tin\",\r\n" + 
+				"            \"SBO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 15 ltr Tin\",\r\n" + 
+				"            \"SBO 200 ml Pet\",\r\n" + 
+				"            \"SBO 5 ltr Jar\",\r\n" + 
+				"            \"SBO 500 ml Pet\",\r\n" + 
+				"            \"SBO 500 ml Pch\",\r\n" + 
+				"            \"SFO 1 ltr Pet\",\r\n" + 
+				"            \"SFO 1 ltr Pch\",\r\n" + 
+				"            \"SFO 5 ltr Jar\",\r\n" + 
+				"            \"SFO 500 ml Pch\",\r\n" + 
+				"            \"SFO 500 ml Pet\",\r\n" + 
+				"            \"SFO 15 ltr Jar \",\r\n" + 
+				"            \"SBO 1 ltr Pch (ETP)\",\r\n" + 
+				"            \"SBO 1 ltr Pet (ETP)\",\r\n" + 
+				"            \"RBO Rs 10\\/-\",\r\n" + 
+				"            \"SBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"RBO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTRBO1001\",\r\n" + 
+				"            \"HTRBO1002\",\r\n" + 
+				"            \"HTRBO1003\",\r\n" + 
+				"            \"HTRBO1004\",\r\n" + 
+				"            \"HTSBO1001\",\r\n" + 
+				"            \"HTSBO1002\",\r\n" + 
+				"            \"HTSBO1003\",\r\n" + 
+				"            \"HTSBO1004\",\r\n" + 
+				"            \"HTSBO1005\",\r\n" + 
+				"            \"HTSBO1006\",\r\n" + 
+				"            \"HTSBO1007\",\r\n" + 
+				"            \"HTSBO1008\",\r\n" + 
+				"            \"HTSBO1009\",\r\n" + 
+				"            \"HTSFO1001\",\r\n" + 
+				"            \"HTSFO1002\",\r\n" + 
+				"            \"HTSFO1003\",\r\n" + 
+				"            \"HTSFO1004\",\r\n" + 
+				"            \"HTSFO1005\",\r\n" + 
+				"            \"HTSFO1006\",\r\n" + 
+				"            \"HTSBO1010\",\r\n" + 
+				"            \"HTSBO1011\",\r\n" + 
+				"            \"HTRBO1005\",\r\n" + 
+				"            \"HTSBO1012\",\r\n" + 
+				"            \"HTRBO1006\",\r\n" + 
+				"            \"HTRBO1007\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:30:00\",\r\n" + 
+				"          \"modified\":\"2018-07-07 17:28:04\",\r\n" + 
+				"          \"discountpercent\":\"4.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"10.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"49\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"49\",\r\n" + 
+				"          \"name\":\"Buy KGMO 1 case to 3 case Get 4% Discount\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"70\",\r\n" + 
+				"          \"erp_id\":\"North 1 July 18 (B)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTKGMO1013\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:31:00\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"4.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"1.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"50\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"50\",\r\n" + 
+				"          \"name\":\"Buy KGMO 4 case & above Get 5% Discount\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-02 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"70\",\r\n" + 
+				"          \"erp_id\":\"North 1 July 18 (B)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTKGMO1013\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-02 11:31:39\",\r\n" + 
+				"          \"modified\":\"2018-07-02 11:44:15\",\r\n" + 
+				"          \"discountpercent\":\"5.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"4.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"51\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"51\",\r\n" + 
+				"          \"name\":\"Buy All Oil 30 case & above Get 2% off\",\r\n" + 
+				"          \"applyincases\":\"0\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-06 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"slab\",\r\n" + 
+				"          \"schemetype\":\"qps\",\r\n" + 
+				"          \"schemegroup_id\":\"71\",\r\n" + 
+				"          \"erp_id\":\"\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"0\",\r\n" + 
+				"          \"created\":\"2018-07-06 09:28:28\",\r\n" + 
+				"          \"modified\":\"2018-07-12 16:47:35\",\r\n" + 
+				"          \"discountpercent\":\"2.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"30.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"52\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"52\",\r\n" + 
+				"          \"name\":\"Purchase KGMO 10 case Get 1% Off\",\r\n" + 
+				"          \"applyincases\":\"2\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-12 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"72\",\r\n" + 
+				"          \"erp_id\":\"WB July 18 (H)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"52\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1014\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"53\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1015\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"54\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1016\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTKGMO1013\",\r\n" + 
+				"            \"HTKGMO1014\",\r\n" + 
+				"            \"HTKGMO1015\",\r\n" + 
+				"            \"HTKGMO1016\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-12 11:53:50\",\r\n" + 
+				"          \"modified\":\"2018-07-12 16:47:35\",\r\n" + 
+				"          \"discountpercent\":\"1.00\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"10.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      },\r\n" + 
+				"      \"53\":{  \r\n" + 
+				"        \"Scheme\":{  \r\n" + 
+				"          \"scheme_id\":\"53\",\r\n" + 
+				"          \"name\":\"Purchase KGMO 20 case Get 1.5% Off\",\r\n" + 
+				"          \"applyincases\":\"2\",\r\n" + 
+				"          \"startdatetime\":\"2018-07-12 00:00:00\",\r\n" + 
+				"          \"enddatetime\":\"2018-07-31 23:59:59\",\r\n" + 
+				"          \"type\":\"sku\",\r\n" + 
+				"          \"applytype\":\"prorated\",\r\n" + 
+				"          \"schemetype\":\"\",\r\n" + 
+				"          \"schemegroup_id\":\"72\",\r\n" + 
+				"          \"erp_id\":\"WB July 18 (H)\",\r\n" + 
+				"          \"active\":\"1\",\r\n" + 
+				"          \"for_skunit_id\":[  \r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"1\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1001\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"2\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1002\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"3\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1003\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"4\",\r\n" + 
+				"              \"name\":\"KGMO 200ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1004\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"5\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1005\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"6\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1006\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"7\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1007\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"8\",\r\n" + 
+				"              \"name\":\"KGMO 500 ml Pch\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1008\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"9\",\r\n" + 
+				"              \"name\":\"KGMO Rs 10\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1009\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"10\",\r\n" + 
+				"              \"name\":\"KGMO Rs 5\\/-\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1010\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"35\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1011\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"36\",\r\n" + 
+				"              \"name\":\"KGMO 2 ltr Jar\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1012\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"44\",\r\n" + 
+				"              \"name\":\"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1013\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"52\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pet (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1014\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"53\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1015\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            },\r\n" + 
+				"            {  \r\n" + 
+				"              \"skunit_id\":\"54\",\r\n" + 
+				"              \"name\":\"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"              \"skucode\":\"HTKGMO1016\",\r\n" + 
+				"              \"qty\":\"0\"\r\n" + 
+				"            }\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_qty\":[  \r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\",\r\n" + 
+				"            \"0\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skunit_name\":[  \r\n" + 
+				"            \"KGMO 1 ltr Pet\",\r\n" + 
+				"            \"KGMO 1 ltr Pch\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (BDG)\",\r\n" + 
+				"            \"KGMO 200ml Pet\",\r\n" + 
+				"            \"KGMO 5 ltr Jar\",\r\n" + 
+				"            \"KGMO 500 ml Pet\",\r\n" + 
+				"            \"KGMO 500 ml Pet (BDG)\",\r\n" + 
+				"            \"KGMO 500 ml Pch\",\r\n" + 
+				"            \"KGMO Rs 10\\/-\",\r\n" + 
+				"            \"KGMO Rs 5\\/-\",\r\n" + 
+				"            \"KGMO 1 ltr Pch ( 15 Pcs )\",\r\n" + 
+				"            \"KGMO 2 ltr Jar\",\r\n" + 
+				"            \"KGMO 5 ltr Jar (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pet (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pch (Promo)\",\r\n" + 
+				"            \"KGMO 1 ltr Pch (Promo)\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"for_skucode\":[  \r\n" + 
+				"            \"HTKGMO1001\",\r\n" + 
+				"            \"HTKGMO1002\",\r\n" + 
+				"            \"HTKGMO1003\",\r\n" + 
+				"            \"HTKGMO1004\",\r\n" + 
+				"            \"HTKGMO1005\",\r\n" + 
+				"            \"HTKGMO1006\",\r\n" + 
+				"            \"HTKGMO1007\",\r\n" + 
+				"            \"HTKGMO1008\",\r\n" + 
+				"            \"HTKGMO1009\",\r\n" + 
+				"            \"HTKGMO1010\",\r\n" + 
+				"            \"HTKGMO1011\",\r\n" + 
+				"            \"HTKGMO1012\",\r\n" + 
+				"            \"HTKGMO1013\",\r\n" + 
+				"            \"HTKGMO1014\",\r\n" + 
+				"            \"HTKGMO1015\",\r\n" + 
+				"            \"HTKGMO1016\"\r\n" + 
+				"          ],\r\n" + 
+				"          \"unitcasecalculation\":\"1\",\r\n" + 
+				"          \"created\":\"2018-07-12 11:53:50\",\r\n" + 
+				"          \"modified\":\"2018-07-12 16:47:35\",\r\n" + 
+				"          \"discountpercent\":\"1.50\",\r\n" + 
+				"          \"foramount\":\"0.00\",\r\n" + 
+				"          \"forquantity\":\"20.00\",\r\n" + 
+				"          \"saverupee\":0,\r\n" + 
+				"          \"free_skus\":[  \r\n" + 
+				"\r\n" + 
+				"          ]\r\n" + 
+				"        }\r\n" + 
+				"      }\r\n" + 
+				"    }\r\n" + 
+				"  }\r\n" + 
+				"},\r\n" + 
+				"        \"3\":{  \r\n" + 
+				"          \"statuscode\":\"S01\",\r\n" + 
+				"          \"message\":\"Authentication Success\",\r\n" + 
+				"          \"authtoken\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpYXQiOjYzNjY2OTkxNTk3OTQ4NjY5MywianRpIjoiMmM3ZGIxMzctYzE3My00OTcxLWFmZDctZDVjMmQ0OGE2ZTVlIiwiVXNlcklkIjoiMyIsIkxvZ2luSWQiOiJFbWFtaS5kaXYiLCJWZXJzaW9uQ29kZSI6IjEifQ.7zlnXdp4j2fwGiZu_0R9w-C-lB21mvpTJpSyvwW4wWBbQC18Is3hRHMlVKXOp8bp\"\r\n" + 
+				"        }\r\n" + 
+				"      }\r\n" + 
+				"    },\r\n" + 
+				"    \"1\":{  \r\n" + 
+				"      \"parent\":null,\r\n" + 
+				"      \"currentResponse\":{  \r\n" + 
+				"        \"statuscode\":\"S01\",\r\n" + 
+				"        \"message\":\"Authentication Success\",\r\n" + 
+				"        \"authtoken\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpYXQiOjYzNjY2OTkxNTk3OTQ4NjY5MywianRpIjoiMmM3ZGIxMzctYzE3My00OTcxLWFmZDctZDVjMmQ0OGE2ZTVlIiwiVXNlcklkIjoiMyIsIkxvZ2luSWQiOiJFbWFtaS5kaXYiLCJWZXJzaW9uQ29kZSI6IjEifQ.7zlnXdp4j2fwGiZu_0R9w-C-lB21mvpTJpSyvwW4wWBbQC18Is3hRHMlVKXOp8bp\"\r\n" + 
+				"      },\r\n" + 
+				"      \"translatorMap\":{  \r\n" + 
+				"\r\n" + 
+				"      },\r\n" + 
+				"      \"values\":{  \r\n" + 
+				"\r\n" + 
+				"      }\r\n" + 
+				"    }\r\n" + 
+				"  },\r\n" + 
+				"  \"dryRun\":false\r\n" + 
+				"}";
+	
+		ObjectMapper mapper= new ObjectMapper();
+		//System.out.println(mapper.writeValueAsString( mapper.readValue(objectHolder, Object.class)));
+		NashornHelper noshornHelper = new NashornHelper();
+	   Object myObject=	mapper.readValue(responseBody1, Object.class);
+	  // System.out.println(myObject);
+		Object object=noshornHelper.process(javascript5, mapper.readValue(objectHolder, Object.class),  mapper.readValue(resonseBody3, Object.class));
+		ObjectMapper objectMapper=new ObjectMapper();
+		System.out.println(objectMapper.writeValueAsString(object));
+	}
+
+}

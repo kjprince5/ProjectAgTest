@@ -1,0 +1,33 @@
+function converter(holder, myCode) {
+	var schemeChannelMappingArr = [];
+	for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {
+		
+		var obj = myCode.configs['0'].values['2'].Response.schemedetail[key];
+		var scheme = obj.Scheme;
+		
+		if (scheme.active==1 && scheme.schemetype != "qps") {
+		
+			for(i = 0; i < obj.Holder.length; i++) {
+				if (obj.Holder[i].Schemeholder.holdertype == "distributor") {
+					if (scheme.active == 1) {
+					var schemeChannelMapping = {};
+					
+					schemeChannelMapping.Scheme_Code = scheme.erp_id;
+					schemeChannelMapping.Distributor_Code = obj.Holder[i].holderdata.erp_id;
+					schemeChannelMapping.Channel_Name = "";
+					schemeChannelMapping.Retailer_Code = "";
+					schemeChannelMapping.Flag = scheme.active;
+			    	schemeChannelMappingArr.push(schemeChannelMapping);
+			    	}
+				}
+			}
+		
+		}
+    }
+     if(schemeChannelMappingArr.length == 0 && myCode.configs['0'].values['2'].Response.Result) {
+	 return	schemeChannelMappingArr = "_RUNAGAIN";
+	 }
+    
+    
+	return JSON.stringify(schemeChannelMappingArr);
+ }

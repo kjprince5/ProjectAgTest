@@ -1,0 +1,106 @@
+package com.valforma.projectag.helper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.valforma.projectag.common.util.AGUtil;
+import com.valforma.projectag.common.util.JobException;
+import com.valforma.projectag.common.util.JsonUtil;
+import com.valforma.projectag.contracts.ObjectHolder;
+import com.valforma.projectag.model.JobDetail;
+import com.valforma.projectag.model.Step;
+import com.valforma.projectag.model.StepSettings;
+import com.valforma.projectag.service.StepSettingsService;
+
+@Component
+public class FileStepProcessor implements StepProcessor {
+
+	@Autowired
+	NashornHelper nashornHelper;
+
+	@Autowired
+	Map<String, FileHandler> fileHandlers = new HashMap<>();
+
+	@Autowired
+	StepSettingsService stepSettingsService;
+
+	@Autowired
+	AGUtil agUtil;
+
+	@Override
+	public Object processStep(JobDetail jobDetail, Step step, ObjectHolder config, Integer level) {
+		System.out.println(JsonUtil.toString(config));
+		List<StepSettings> stepSettingsList = stepSettingsService.getStepSettings(step.getClientId(), step.getId(),
+				"FOLDER_EMPTY_CONDITION");
+		if (!stepSettingsList.isEmpty()) {
+			StepSettings stepSettings = stepSettingsList.get(0);
+			if (stepSettings.getValue() != null && !stepSettings.getValue().isEmpty()) {
+				if (!agUtil.isThisPathContainsNoFiles(stepSettings.getValue()))
+					return null;
+			}
+		}
+		String[] parameters = step.getPath().split("\\|");
+		/*
+		 * String user = "root"; String password = "V@!f0rm@@eVoma"; String host
+		 * = "172.16.1.19"; int port = 22; String baseDir = "/var/www/html";
+		 * String newDir = "new"; String processedDir = "processed";
+		 */
+
+		String user = parameters[0];
+		String password = parameters[1];
+		String host = parameters[2];
+		int port = new Integer(parameters[3]);
+		String baseDir = parameters[4];
+		String newDir = parameters[5];
+		String processedDir = parameters[6];
+		String ppkPath = null;
+		if (parameters.length >= 8) {
+			ppkPath = parameters[7];
+		}
+		List<Object[]> objects = fileHandlers.get(step.getSubType() + "Handler").handle(step, user, host, port,
+				password, baseDir, newDir, processedDir, config, level, ppkPath);
+
+		if (objects.isEmpty())
+			return null;
+		System.out.println(JsonUtil.toString(objects));
+		if (step.getResponseFormatterJs() != null && !step.getResponseFormatterJs().isEmpty()) {
+			return nashornHelper.process(step.getResponseFormatterJs(), config, objects);
+		}
+		return objects;
+
+	}
+
+	public List<Object[]> readBooksFromCSV(String fileName) throws JobException {
+		List<Object[]> books = new ArrayList<>();
+		Path pathToFile = Paths.get(fileName);
+		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
+
+			String line = br.readLine();
+			while (line != null) {
+
+				books.add(line.split(","));
+				line = br.readLine();
+			}
+		} catch (IOException ioe) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ioe.printStackTrace(pw);
+			throw new JobException("Error From Reading CSV", sw.toString());
+		}
+		return books;
+	}
+}

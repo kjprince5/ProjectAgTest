@@ -1,0 +1,28 @@
+function converter(holder, myCode) {
+	
+	var productMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Products.length; i++) {
+		
+		var Product = myCode.configs['0'].values['2'].Products[i]
+		var productMaster = {};
+		productMaster.Product_Code = Product.Skunit.skucode;
+    	productMaster.Product_Full_Desc = Product.Skunit.description;
+    	productMaster.Product_Short_Desc = Product.Skunit.name;
+    	productMaster.Product_Base_Sale_UOM = "PIECE";	//
+    	productMaster.Level1_Code = "1";	//
+    	productMaster.Level1_Name = Product.Brand.name;productMaster.Level2_Code = Product.Skunit.Category[0].id;
+	    productMaster.Level2_Name = Product.Skunit.Category[0].name;
+	    productMaster.Level3_Code = "";
+	    productMaster.Level3_Name = "";
+	    productMaster.Level4_Code = "";
+	    productMaster.Level4_Name = "";
+    	productMaster.Unit_Measure = "Ltr"; //
+    	productMaster.Weight = Product.Variant.name;
+    	productMaster.Base_Price = "";	//
+    	productMaster.Pack1_Size = Product.Skunit.unitspercase;
+    	productMaster.Pack1_UOM = "CASE";	//
+    	productMaster.Flag = Product.Skunit.active;
+    	productMasterArr.push(productMaster);
+	}	
+	return JSON.stringify(productMasterArr);
+ }

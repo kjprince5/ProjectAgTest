@@ -1,0 +1,212 @@
+package com.valforma.projectag.helper;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.valforma.projectag.model.IntegrationInstanceFailure;
+
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+@Component
+public class TemplateParser {
+	Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
+
+	public String parse(String clientCode, String templateName, String fillerObject, Object object) {
+
+		try {
+			StringTemplateLoader stringLoader = new StringTemplateLoader();
+			stringLoader.putTemplate(clientCode + "_" + templateName, fillerObject);
+			cfg.setTemplateLoader(stringLoader);
+			Template template = cfg.getTemplate(clientCode + "_" + templateName);
+			StringWriter stringWriter = new StringWriter();
+			template.process(object, stringWriter);
+			stringWriter.flush();
+			return stringWriter.toString();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static void main(String[] args) {
+		
+		
+		
+		/*
+		 * ObjectHolder objectHolder= new ObjectHolder();
+		 * objectHolder.getConfigs().put("0", new Config());
+		 * 
+		 * String[] array= {"1233444","442","3","10/17/2017","101","2"};
+		 * String[] array2= {"1233444","442","3","10/17/2017","101","2"};
+		 * List<String[]> list= new ArrayList<>(); list.add(array);
+		 * list.add(array2); Map<String,Object> token= new LinkedHashMap<>();
+		 * token.put("Token", true);
+		 * objectHolder.getConfigs().get("0").getValues().put("1", token);
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * String template=
+		 * "{<#setting date_format=\"yyyy-MM-dd\">\"data[url]\":\"/payments/addMultiplePrimarySales\""
+		 * + "<#list 0..configs['0'].values['1']?size-1 as i>" +
+		 * ",\"data[postparams][Sales][${i}][Payment][warehouse_id]\":${configs['0'].values['1'][i][2]}"
+		 * + ",\"data[postparams][Sales][${i}][Payment][mode]\":\"credit\"" +
+		 * ",\"data[postparams][Sales][${i}][Payment][fordate]\":\"${configs['0'].values['1'][i][3]?datetime(\"MM/dd/yyyy\")?date}\""
+		 * +
+		 * ",\"data[postparams][Sales][${i}][Payment][billno]\":${configs['0'].values['1'][i][1]}"
+		 * +
+		 * ",\"data[postparams][Sales][${i}][Payment][invoiceid]\":${configs['0'].values['1'][i][0]}"
+		 * +
+		 * ",\"data[postparams][Sales][${i}][Paymentdetail][0][skunit_id]\":${configs['0'].values['1'][i][4]}"
+		 * +
+		 * ",\"data[postparams][Sales][${i}][Paymentdetail][0][quantity]\":${configs['0'].values['1'][i][5]}</#list>}"
+		 * ; TemplateParser emailParser = new TemplateParser();
+		 * System.out.println(emailParser.parse("one", "abc",
+		 * "Y${Token?string}Y", token));
+		 */
+		
+		List<IntegrationInstanceFailure> list = new ArrayList<>();
+		Map<String, Object> root = new HashMap<String, Object>();
+		root.put("integrationInstanceFailureList", list);
+		IntegrationInstanceFailure instanceFailure = new IntegrationInstanceFailure();
+		instanceFailure.setStepId(BigInteger.ONE);
+		instanceFailure.setErrorResponse("My Response");
+		list.add(instanceFailure);
+		
+		ObjectMapper objectMapper= new ObjectMapper();
+		
+		try {
+			
+
+			TemplateParser templateParser= new TemplateParser();
+				System.out
+						.println(templateParser
+						.parse("one",
+								"two",
+								"Hello There,\r\n       These are the failed jobs for yesterday.\r\n <table>\r\n <th>\r\n <td>\r\n Step Id\r\n </td>\r\n <td>\r\n Reason\r\n </td>\r\n </th>\r\n<#list 0..integrationInstanceFailureList?size-1 as i>\r\n<tr>\r\n <td>\r\n ${integrationInstanceFailureList[i].stepId}\r\n </td>\r\n <td>\r\n ${integrationInstanceFailureList[i].errorResponse}\r\n </td>\r\n </tr>\r\n</#list>\r\n</table>",
+										root));
+		
+			
+		/*Object map=		objectMapper.readValue("{\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"values\":{\"0\":{\"0\":{\"invoiceId\":\"1231212\",\"billNo\":\"440\",\"warehouseId\":\"3\",\"forDate\":\"10/17/2017\",\" \":{\"0\":{\"skuId\":\"2\",\"quantity\":\"1\"}}}},\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"b30f5e0d89907efd16fc3ed4ddfc5318b0214920\",\"client\":\"NWEzMTA0ZDYxNTg0Njdm\",\"client_secret\":\"22eefc6def6740634c34236abc23428afa4295e8\",\"refresh_token\":\"75608e890d9217add4436854828c99c547527f8b\",\"user_id\":\"40737\",\"username\":\"mitwm1\",\"password\":\"409388e47d25f88a48b65ab8f78cf5cfbdd6ae52\",\"domain\":\"https://stagingmit.bizom.in/\",\"cookie\":\"CAKEPHP=jjmemh5umlopqmoogcrv6ofrv6\",\"role_id\":\"3\",\"role_name\":\"WAREHOUSE MANAGER\",\"role_specific_id\":\"46800\"},\"2\":null,\"integrationInstanceFailureId\":44}}}}", LinkedHashMap.class);
+		Object map2=	objectMapper.readValue("{\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"values\":{\"0\":{\"0\":{\"invoiceId\":\"12334501\",\"billNo\":\"501\",\"warehouseId\":\"4\",\"forDate\":\"10/17/2017\",\"paymentDetails\":{\"0\":{\"skuId\":\"2\",\"quantity\":\"2\"},\"1\":{\"skuId\":\"2\",\"quantity\":\"2\"}}}},\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"35535c5e9d947bcef78aa8d42a13f068e9c94459\",\"client\":\"NWEzMTA4NGY0MDc2ZWE5\",\"client_secret\":\"0a97ca30068819bb74e70422a0933c2813ed270c\",\"refresh_token\":\"014f0a9c718ac834c1d7b4ce4b0ab689482a2d91\",\"user_id\":\"40737\",\"username\":\"mitwm1\",\"password\":\"409388e47d25f88a48b65ab8f78cf5cfbdd6ae52\",\"domain\":\"https://stagingmit.bizom.in/\",\"cookie\":\"CAKEPHP=t4t0vjej2og0iodrm4b9j7eip4\",\"role_id\":\"3\",\"role_name\":\"WAREHOUSE MANAGER\",\"role_specific_id\":\"46800\"},\"2\":{\"0\":{\"invoiceId\":\"12334501\",\"billNo\":\"501\",\"warehouseId\":\"4\",\"forDate\":\"10/17/2017\",\"paymentDetails\":{\"0\":{\"skuId\":\"2\",\"quantity\":\"2\"},\"1\":{\"skuId\":\"2\",\"quantity\":\"2\"}}}},\"integrationInstanceFailureId\":37}}}}", LinkedHashMap.class);
+		Object map3=	objectMapper.readValue("{\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"values\":{\"0\":{\"main\":[\"7111005418\",\"0002000019\",\"0002000019\",\"20\",\"1101\",\"MNSD06\",\"20180218\",\"90200099_565\",\" 1000.000\",\"POU\",\" 423750\",\" 0.00\",\"JOCG 6JOSG 6\",\" 50850.00\",\" 474600.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 125.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 423750.00\",\" 50850.00\",\" 474600.00\"],\"skus\":[[\"90200099_565\",\" 1000.000\",\" 0.00\",\" 474600.00\",\" 423750\",\"100\",\"200\"]]},\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"404c98a011072718dcff2f211ddec86f945c0489\",\"client\":\"NWE4Yjk4MjY4ZTEwYTRj\",\"client_secret\":\"aaa43982855044d909c2d09b4fe06f7ff7dba879\",\"refresh_token\":\"09b78da8c63b577c38f18f03dad793bb48dd2a72\",\"user_id\":\"125238\",\"username\":\"paragadmin\",\"password\":\"409388e47d25f88a48b65ab8f78cf5cfbdd6ae52\",\"domain\":\"https://stagingparagmilkfoods.bizom.in/\",\"cookie\":\"CAKEPHP=oufv1tm92telsu3ee2rupmc167\",\"role_id\":\"1\",\"role_name\":\"ADMIN\",\"role_specific_id\":\"592\"},\"failureStepId\":35,\"2\":{\"main\":[\"7111005418\",\"0002000019\",\"0002000019\",\"20\",\"1101\",\"MNSD06\",\"20180218\",\"90200099_565\",\" 1000.000\",\"POU\",\" 423750\",\" 0.00\",\"JOCG 6JOSG 6\",\" 50850.00\",\" 474600.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 125.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 423750.00\",\" 50850.00\",\" 474600.00\"],\"skus\":[[\"90200099_565\",\" 1000.000\",\" 0.00\",\" 474600.00\",\" 423750\"]]},\"integrationInstanceFailureId\":477}}}}", LinkedHashMap.class);
+		Object map4=	objectMapper.readValue("{\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"values\":{\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"1d43b2ef9242f8de6ad980d175f2e48af7741f24\",\"client\":\"NWE4YzIwZDUyZjRhMmUx\",\"client_secret\":\"c3ca939cc36426811d8afcf27801ba44343a2b52\",\"refresh_token\":\"f04b62759737570db3cc5b1a62ac71ef90c4d9bd\",\"user_id\":\"125238\",\"username\":\"paragadmin\",\"password\":\"409388e47d25f88a48b65ab8f78cf5cfbdd6ae52\",\"domain\":\"https://stagingparagmilkfoods.bizom.in/\",\"cookie\":\"CAKEPHP=95et09qh93tt71f41jrjqjdkl3\",\"role_id\":\"1\",\"role_name\":\"ADMIN\",\"role_specific_id\":\"592\"},\"2\":[{\"main\":[\"7111006419\",\"0001610\",\"0001610\",\"20\",\"1101\",\"MNSD06\",\"20180220\",\"90500030_72\",\" 1600.000\",\"JAR\",\" 348000\",\" 0.00\",\"JOCG 6JOSG 6\",\" 41760.00\",\" 389760.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 100.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 348000.00\",\" 41760.00\",\" 389760.00\"],\"skus\":[[\"90500030_72\",\" 1600.000\",\" 0.00\",\" 389760.00\",\" 348000\"]]},{\"main\":[\"7111006420\",\"0001610\",\"0001610\",\"20\",\"1101\",\"MNSD06\",\"20180220\",\"90500030_72\",\" 1200.000\",\"JAR\",\" 508500\",\" 0.00\",\"JOCG 6JOSG 6\",\" 61020.00\",\" 569520.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 150.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 508500.00\",\" 61020.00\",\" 569520.00\"],\"skus\":[[\"90500030_72\",\" 1200.000\",\" 0.00\",\" 569520.00\",\" 508500\"]]},{\"main\":[\"7111006421\",\"0001610\",\"0001610\",\"20\",\"1101\",\"MNSD06\",\"20180220\",\"90500030_72\",\" 1000.000\",\"POU\",\" 423750\",\" 0.00\",\"JOCG 6JOSG 6\",\" 50850.00\",\" 474600.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 125.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 423750.00\",\" 50850.00\",\" 474600.00\"],\"skus\":[[\"90500030_72\",\" 1000.000\",\" 0.00\",\" 474600.00\",\" 423750\"]]},{\"main\":[\"7111006422\",\"0001610\",\"0001610\",\"20\",\"1101\",\"MNSD06\",\"20180220\",\"90500030_72\",\" 1000.000\",\"POU\",\" 423750\",\" 0.00\",\"JOCG 6JOSG 6\",\" 50850.00\",\" 474600.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 125.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 423750.00\",\" 50850.00\",\" 474600.00\"],\"skus\":[[\"90500030_72\",\" 1000.000\",\" 0.00\",\" 474600.00\",\" 423750\"]]}]}},\"1\":{\"parent\":null,\"currentResponse\":{\"main\":[\"7111006422\",\"0001610\",\"0001610\",\"20\",\"1101\",\"MNSD06\",\"20180220\",\"90500030_72\",\" 1000.000\",\"POU\",\" 423750\",\" 0.00\",\"JOCG 6JOSG 6\",\" 50850.00\",\" 474600.00\",\"MH-14/GD-7020\",\"\",\"\",\"\",\"\",\"\",\"\",\" 125.000\",\"BOX\",\"ZDOR\",\"TAN\",\" 423750.00\",\" 50850.00\",\" 474600.00\"],\"skus\":[[\"90500030_72\",\" 1000.000\",\" 0.00\",\" 474600.00\",\" 423750\"]]},\"values\":{\"1\":null}}}}", LinkedHashMap.class);
+		*/Object map5=  	objectMapper.readValue("{\"jobRunningId\":\"813b3a19-e994-4d74-9ab4-1ae440e10b66\",\"runAgain\":false,\"startSequence\":null,\"endSequence\":null,\"batchSize\":null,\"currentDate\":1535087730843,\"lastScheduledStartTime\":null,\"nextRunTime\":null,\"configs\":{\"0\":{\"parent\":null,\"currentResponse\":null,\"translatorMap\":{},\"values\":{\"0\":[\"\",\"DSTL\",\"20000001\",\"RNZ INTERNATIONAL\",\"\",\"151\",\"0\",\"0\",\"0\",\"150.01\",\"0\",\"0\",\"150.01\",\"Ageing_File_18072018_230055.csv\",\"2\",\"18072018\"],\"1\":{\"Result\":\"true\",\"Reason\":null,\"Token\":\"4e7cd317c88a1fdae1774c70b2d6e20ff7cb222d\",\"client\":\"NWI3Zjk0OGU2ZjVjYTA1\",\"client_secret\":\"775c80d12d619cce00276fe812511d87906a8421\",\"refresh_token\":\"c88b1acf8f4327c2af8232ea56c80fe26d2d1987\",\"user_id\":\"211193\",\"username\":\"mahadhanadmin\",\"password\":\"409388e47d25f88a48b65ab8f78cf5cfbdd6ae52\",\"domain\":\"https://stagingmahadhan.bizom.in/\",\"cookie\":\"CAKEPHP=2mh46t489s9gpmk5mgiskbc004\",\"role_id\":\"0\",\"role_name\":null,\"role_specific_id\":null},\"failureStepId\":193,\"integrationInstanceFailureId\":16337}}},\"dryRun\":false}",LinkedHashMap.class);
+		
+		
+		Object o =templateParser.parse("1", "aggd11","<#setting date_format=\"yyyy-MM-dd\"><?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+				"	<datas>\r\n" + 
+				"	\r\n" + 
+				"		<data>\r\n" + 
+				"			<outlet_erp_id>${(configs['0'].values['0'][2])!\"\"}</outlet_erp_id>\r\n" + 
+				"			<col_0_to_30>${(configs['0'].values['0'][7])?replace(\"@#$\", \"\")}</col_0_to_30>\r\n" + 
+				"			<col_31_to_60>${(configs['0'].values['0'][8])?replace(\"@#$\", \"\")}</col_31_to_60>\r\n" + 
+				"			<col_61_to_90>${(configs['0'].values['0'][9])?replace(\"@#$\", \"\")}</col_61_to_90>\r\n" + 
+				"			<col_91_to_120>${(configs['0'].values['0'][10])?replace(\"@#$\", \"\")}</col_91_to_120>\r\n" + 
+				"			<col_121_to_150>0.00</col_121_to_150>\r\n" + 
+				"			<col_151_to_180>0.00</col_151_to_180>\r\n" + 
+				"			<above_180>${(configs['0'].values['0'][11])?replace(\"@#$\", \"\")}</above_180>\r\n" + 
+				"			<ageingdate>${(configs['0'].values['0'][15])?datetime(\"ddMMyyyy\")?date}</ageingdate>\r\n" + 
+				"			<total>${(configs['0'].values['0'][12])?replace(\"@#$\", \"\")}</total>\r\n" + 
+				"		</data>\r\n" + 
+				"		\r\n" + 
+				"	</datas>\r\n" + 
+				"",map5);
+		
+		
+		System.out.println(o);
+		
+	
+		
+		/*
+		Object o1=templateParser.parse("1", "aggd", "<#setting date_format=\"yyyy-MM-dd\">\r\n" + 
+				"<sales>\r\n" + 
+				"  <sale>\r\n" + 
+				"    <payment>\r\n" + 
+				"      <invoiceid>${configs['1'].currentResponse.main[0]}</invoiceid>\r\n" + 
+				"      <outlet_erp_id>${configs['1'].currentResponse.main[2]?number?c}</outlet_erp_id>\r\n" + 
+				"      <from_warehouse_erpid>${configs['1'].currentResponse.main[4]}</from_warehouse_erpid>   \r\n" + 
+				"      <amount>${configs['1'].currentResponse.main[14]?trim}</amount>\r\n" + 
+				"     <#-- <bill_discount>${configs['1'].currentResponse.main[11]}</bill_discount>\r\n" + 
+				"      <bill_discount_type>value</bill_discount_type>-->\r\n" + 
+				"      <fordate>${configs['1'].currentResponse.main[6]?datetime(\"yyyyMMdd\")?date}</fordate>\r\n" + 
+				"      <mode>Cash</mode>\r\n" + 
+				"      <invoicebillno>${configs['1'].currentResponse.main[0]}</invoicebillno>\r\n" + 
+				"    </payment>\r\n" + 
+				"    <#list 0..configs['1'].currentResponse.skus?size-1 as i>\r\n" + 
+				"    <paymentdetail>\r\n" + 
+				"      <skunit_erp_id>${configs['1'].currentResponse.skus[i][0]}</skunit_erp_id>\r\n" + 
+				"      <quantityincases>0</quantityincases>\r\n" + 
+				"      <quantity>${configs['1'].currentResponse.skus[i][1]?trim?number?round?c}</quantity>\r\n" + 
+				"      ${(configs['1'].currentResponse.skus[i][2]?trim?number+(configs['1'].currentResponse.skus[i][5]?trim?number/(configs['1'].currentResponse.skus[i][4]?trim?number-configs['1'].currentResponse.skus[i][2]?trim?number))*configs['1'].currentResponse.skus[i][2]?trim?number)/configs['1'].currentResponse.skus[i][1]?trim?number?round}</discount>\r\n" + 
+				"      <#--<discount>${configs['1'].currentResponse.skus[i][2]?trim?number/configs['1'].currentResponse.skus[i][1]?trim?number}</discount>-->\r\n" + 
+				"      <discount_type>value</discount_type>\r\n" + 
+				"      <status>purchased</status>     \r\n" + 
+				"      <amount>${((configs['1'].currentResponse.skus[i][5]?trim?number+(configs['1'].currentResponse.skus[i][5]?trim?number/(configs['1'].currentResponse.skus[i][4]?trim?number-configs['1'].currentResponse.skus[i][2]?trim?number))*configs['1'].currentResponse.skus[i][2]?trim?number)+configs['1'].currentResponse.skus[i][3]?trim?number)?c}</amount><#--${configs['1'].currentResponse.skus[i][3]?trim-->\r\n" + 
+				"      <#--<amount>${configs['1'].currentResponse.skus[i][3]?trim}</amount>-->\r\n" + 
+				"      <unitPrice>${configs['1'].currentResponse.skus[i][4]?trim?number/configs['1'].currentResponse.skus[i][1]?trim?number}</unitPrice>\r\n" + 
+				"    </paymentdetail>\r\n" + 
+				"    </#list>\r\n" + 
+				"   <deliveryDetail>\r\n" + 
+				"      <vehicle_id>${configs['1'].currentResponse.main[15]}</vehicle_id>\r\n" + 
+				"      <drivername>${configs['1'].currentResponse.main[16]}</drivername>\r\n" + 
+				"      <drivernumber>${configs['1'].currentResponse.main[17]}</drivernumber>\r\n" + 
+				"   </deliveryDetail>\r\n" + 
+				"  </sale>\r\n" + 
+				"</sales>\r\n" + 
+				"\r\n" + 
+				"" + 
+				"", map4);
+		*/
+		
+		
+		
+//		Object o2=templateParser.parse("1", "aggd", "{\r\n" + 
+//				" <#setting date_format=\"yyyy-MM-dd\">\r\n" + 
+//				" \"data[url]\":[\"/payments/addMultiplePrimarySales\"]\r\n" + 
+//				" <#list 0..configs['0'].values['0']?size-1 as i>\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Payment][warehouse_id]\":[\"${configs['0'].values['0'][i?string].warehouseId}\"]\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Payment][mode]\":[\"credit\"]\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Payment][fordate]\":[\"${configs['0'].values['0'][i?string].forDate?datetime(\"MM/dd/yyyy\")?date}\"]\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Payment][billno]\":[\"${configs['0'].values['0'][i?string].billNo}\"]\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Payment][invoiceid]\":[\"${configs['0'].values['0'][i?string].invoiceId}\"]\r\n" + 
+//				" <#list 0..configs['0'].values['0'][i?string].paymentDetails?size-1 as k>\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Paymentdetail][${k?string}][skunit_id]\":[\"${configs['0'].values['0'][i?string].paymentDetails[k?string].skuId}\"]\r\n" + 
+//				" ,\"data[postparams][Sales][${i}][Paymentdetail][${k?string}][quantity]\":[\"${configs['0'].values['0'][i?string].paymentDetails[k?string].quantity}\"]\r\n" + 
+//				" </#list>\r\n" + 
+//				" </#list>\r\n" + 
+//				" }", map3);
+		
+
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+	
+
+}

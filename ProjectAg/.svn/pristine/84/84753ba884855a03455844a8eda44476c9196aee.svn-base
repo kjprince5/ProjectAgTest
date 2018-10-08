@@ -1,0 +1,18 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        if (myCode[i][1] != 'S1' || myCode[i][1] != 'S2' || myCode[i][1] != 'S3' || myCode[i][1] != 'S4' || myCode[i][1] != 'S5' || myCode[i][1] != 'S6' || myCode[i][1] != 'S7') {
+		            if (parentDict[myCode[i][2]] === undefined) {
+		                parentDict[myCode[i][2]] = [];
+		                parentDict[myCode[i][2]].INVOICE_ID=myCode[i][2];
+		              
+		            }
+		        }
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }

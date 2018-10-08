@@ -1,0 +1,267 @@
+package com.valforma.projectag.job;
+
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.valforma.projectag.common.util.EmailParser;
+import com.valforma.projectag.common.util.MailBean;
+import com.valforma.projectag.dao.IntegrationInstanceFailureDao;
+import com.valforma.projectag.dao.MailDao;
+import com.valforma.projectag.model.Client;
+import com.valforma.projectag.model.IntegrationInstanceFailure;
+import com.valforma.projectag.model.JobDetail;
+import com.valforma.projectag.model.Mail;
+import com.valforma.projectag.model.MailSettings;
+import com.valforma.projectag.service.ClientService;
+import com.valforma.projectag.service.ClientSettingsService;
+import com.valforma.projectag.service.IntegrationInstanceFailureService;
+import com.valforma.projectag.service.Job;
+import com.valforma.projectag.service.JobDetailService;
+import com.valforma.projectag.service.JobSettingsService;
+import com.valforma.projectag.service.MailService;
+import com.valforma.projectag.service.MailSettingsService;
+
+@Component
+public class MailJob implements Job {
+
+	@Autowired
+	MailBean mailBean;
+
+	@Autowired
+	IntegrationInstanceFailureService integrationInstanceFailureService;
+
+	@Autowired
+	ClientService clientService;
+
+	@Autowired
+	IntegrationInstanceFailureDao integrationInstanceFailureDao;
+
+	@Autowired
+	MailService mailService;
+
+	@Autowired
+	ClientSettingsService clientSettingsService;
+
+	@Autowired
+	JobDetailService jobDetailService;
+
+	@Autowired
+	JobSettingsService jobSettingsService;
+
+	@Autowired
+	EmailParser emailParser;
+
+	@Autowired
+	MailSettingsService mailSettingsService;
+
+	@Autowired
+	MailDao mailDao;
+
+	ObjectMapper objectMapper = new ObjectMapper();
+
+	@Override
+	public void runJob() {
+		System.out.println("Mail Cron started");
+		Client clnt = new Client();
+		try {
+			List<Client> clientList = clientService.getListByCriteria(clnt, -1, 11);
+			for (Client client : clientList) {
+				JobDetail jobDetailSearch = new JobDetail();
+				jobDetailSearch.setClientId(client.getId());
+				List<JobDetail> jobDetails = jobDetailService.getListByCriteria(jobDetailSearch, -1, 0);
+				for (JobDetail jobDetail : jobDetails) {
+					if (jobSettingsService.equal(client.getId(), jobDetail.getId(), "FAILED_JOB_EMAIL_ENABLED",
+							"YES")) {
+						Mail mail = new Mail();
+						mail.setClientId(client.getId());
+						mail.setJobDetailId(jobDetail.getId());
+						MailSettings mailSetting = new MailSettings();
+						mailSetting.setClientId(client.getId());
+						mailSetting.setJobDetailId(jobDetail.getId());
+						List<MailSettings> mailSettings = mailSettingsService.getListByCriteria(mailSetting, -1, 0);
+						IntegrationInstanceFailure integrationInstanceFailure = new IntegrationInstanceFailure();
+						integrationInstanceFailure.setClientId(client.getId());
+						integrationInstanceFailure.setJobDetailId(jobDetail.getId());
+						integrationInstanceFailure.setDone(false);
+						if (!mailSettings.isEmpty()) {
+							Map<String, Boolean> orderBy = new HashMap<>();
+							orderBy.put("creationDate", Boolean.FALSE);
+							List<Mail> mails = mailDao.getListByCriteria(mail, 0, 1, orderBy, false, null);
+							if (mails.isEmpty()) {
+								LocalDateTime localDate = LocalDateTime.now();
+								Date endDate = java.sql.Timestamp.valueOf(localDate);
+								Date startDate = java.sql.Timestamp.valueOf(localDate.minusHours(3));
+								List<IntegrationInstanceFailure> integrationFailureList = integrationInstanceFailureDao
+										.getIntegrationFailureListByDate(integrationInstanceFailure, startDate,
+												endDate);
+								integrationFailureList = setConfigInObject(integrationFailureList);
+								sendMail(client.getId(), jobDetail.getId(), integrationFailureList, startDate, endDate);
+							} else {
+								Mail previousMail = mails.get(0);
+								Date previousMailDate = previousMail.getCreationDate();
+								int mailInterval = mailSettings.get(0).getMailInterval();
+								boolean validToSendMail = validToSendMail(previousMailDate, mailInterval);
+								if (validToSendMail) {
+									LocalDateTime localDate = previousMailDate.toInstant()
+											.atZone(ZoneId.systemDefault()).toLocalDateTime();
+									Date startDate = java.sql.Timestamp.valueOf(localDate.minusSeconds(1));
+									Date endDate = java.sql.Timestamp.valueOf(localDate.plusHours(mailInterval));
+									List<IntegrationInstanceFailure> integrationFailureList = integrationInstanceFailureDao
+											.getIntegrationFailureListByDate(integrationInstanceFailure, startDate,
+													endDate);
+									integrationFailureList = setConfigInObject(integrationFailureList);
+									sendMail(client.getId(), jobDetail.getId(), integrationFailureList, startDate,
+											endDate);
+								}
+							}
+						} else {
+							Date startDate = getTodayStartDate();
+							Date endDate = getTodayEndDate();
+							List<Mail> mailList = mailService.getListByDate(mail, 0, Integer.MAX_VALUE, startDate,
+									endDate);
+							if (mailList.isEmpty()) {
+								List<IntegrationInstanceFailure> integrationFailureList = integrationInstanceFailureDao
+										.getIntegrationFailureListByDate(integrationInstanceFailure,
+												getPreviousDayStartDate(), getPreviousDayEndDate());
+								integrationFailureList = setConfigInObject(integrationFailureList);
+								sendMail(client.getId(), jobDetail.getId(), integrationFailureList, startDate, endDate);
+							}
+						}
+
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Exception in mailJob.runJob()");
+			e.printStackTrace();
+		}
+
+	}
+
+	private void sendMail(BigInteger clientId, BigInteger jobDetailId,
+			List<IntegrationInstanceFailure> integrationFailureList, Date fromDate, Date toDate) {
+
+		String subject = jobSettingsService.getValue(clientId, jobDetailId, "FAILED_JOB_EMAIL_SUBJECT");
+		String fromMail = jobSettingsService.getValue(clientId, jobDetailId, "FAILED_JOB_EMAIL_FROM");
+		String toMail = jobSettingsService.getValue(clientId, jobDetailId, "FAILED_JOB_EMAIL_TO");
+		String fromMailDisplay = fromMail;
+		String fromName = jobSettingsService.getValue(clientId, jobDetailId, "FAILED_JOB_EMAIL_FROM_NAME");
+		String emailTempate = jobSettingsService.getValue(clientId, jobDetailId, "FAILED_JOB_EMAIL_TEMPALATE");
+		Map<String, Object> root = new HashMap<String, Object>();
+		String message = "";
+		root.put("integrationInstanceFailureList", integrationFailureList);
+		root.put("startDate", fromDate);
+		root.put("endDate", toDate);
+		message = emailParser.parse(clientId.toString(), "JOB_DETAIL_MAIL" + jobDetailId, emailTempate, root);
+		boolean mailSent = mailBean.sendMail(clientId, fromMail, fromMailDisplay, fromName, toMail, message, subject,
+				true);
+		if (mailSent) {
+			saveMail(clientId, fromMail, fromMailDisplay, subject, toMail, jobDetailId, toDate);
+		}
+	}
+
+	private void saveMail(BigInteger clientId, String fromMail, String fromMailDisplay, String subject, String toMail,
+			BigInteger jobDetailId, Date date) {
+		Mail mailObj = new Mail();
+		mailObj.setClientId(clientId);
+		mailObj.setCreationDate(date);
+		mailObj.setLastUpdateDate(date);
+		mailObj.setFromMail(fromMail);
+		mailObj.setHeader(fromMailDisplay);
+		mailObj.setSubject(subject);
+		mailObj.setToMail(toMail);
+		mailObj.setJobDetailId(jobDetailId);
+		mailService.save(mailObj);
+	}
+
+	private Date getPreviousDayStartDate() {
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+		LocalDateTime localStartDateTime = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonthValue(),
+				localDateTime.getDayOfMonth(), 0, 0, 0, 0);
+		return java.sql.Timestamp.valueOf(localStartDateTime);
+	}
+
+	private Date getPreviousDayEndDate() {
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+		LocalDateTime localEndDateTime = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonthValue(),
+				localDateTime.getDayOfMonth(), 23, 59, 59, 999999999);
+		return java.sql.Timestamp.valueOf(localEndDateTime);
+	}
+
+	private Date getTodayStartDate() {
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+		LocalDateTime localStartDateTime = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonthValue(),
+				localDateTime.getDayOfMonth(), 0, 0, 0, 0);
+		return java.sql.Timestamp.valueOf(localStartDateTime);
+	}
+
+	private Date getTodayEndDate() {
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+		LocalDateTime localEndDateTime = LocalDateTime.of(localDateTime.getYear(), localDateTime.getMonthValue(),
+				localDateTime.getDayOfMonth(), 23, 59, 59, 999999999);
+		return java.sql.Timestamp.valueOf(localEndDateTime);
+	}
+
+	private boolean validToSendMail(Date date, int hours) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime previousMailDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		previousMailDate = previousMailDate.plusHours(hours);
+		int result = previousMailDate.compareTo(now);
+		return result <= 0;
+	}
+
+	private List<IntegrationInstanceFailure> setConfigInObject(List<IntegrationInstanceFailure> failureList) {
+		try {
+			for (IntegrationInstanceFailure failure : failureList) {
+				failure.setConfigObjectJsonObject(
+						objectMapper.readValue(failure.getConfigObjectJson(), LinkedHashMap.class));
+			}
+		} catch (Exception e) {
+			System.out.println("Exception in mailJob.setConfigInObject()");
+			e.printStackTrace();
+		}
+		return failureList;
+	}
+
+	// final Calendar cal = Calendar.getInstance();
+	// cal.set(Calendar.HOUR_OF_DAY, 0);
+	// cal.set(Calendar.MINUTE, 0);
+	// cal.set(Calendar.SECOND, 0);
+	// // cal.add(Calendar.DATE, -1);
+	// Date startDate = cal.getTime();
+	// cal.set(Calendar.HOUR_OF_DAY, 23);
+	// cal.set(Calendar.MINUTE, 59);
+	// cal.set(Calendar.SECOND, 59);
+	// Date endDate = cal.getTime();
+
+	// LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
+	// LocalDateTime localStartDateTime =
+	// LocalDateTime.of(localDateTime.getYear(),
+	// localDateTime.getMonthValue(), localDateTime.getDayOfMonth(), 0, 0,
+	// 0, 0);
+	// LocalDateTime localEndDateTime = LocalDateTime
+	// .of(localDateTime.getYear(), localDateTime.getMonthValue(),
+	// localDateTime.getDayOfMonth(), 23, 59, 59, 999999999);
+	// Date startDate = java.sql.Timestamp.valueOf(localStartDateTime);
+	// Date endDate = java.sql.Timestamp.valueOf(localEndDateTime);
+	// final Calendar cal = Calendar.getInstance();
+	// cal.set(Calendar.HOUR_OF_DAY, 0);
+	// cal.set(Calendar.MINUTE, 0);
+	// cal.set(Calendar.SECOND, 0);
+	// cal.add(Calendar.DATE, -1);
+	// Date startDate = cal.getTime();
+	// cal.set(Calendar.HOUR_OF_DAY, 23);
+	// cal.set(Calendar.MINUTE, 59);
+	// cal.set(Calendar.SECOND, 59);
+	// Date endDate = cal.getTime();
+}

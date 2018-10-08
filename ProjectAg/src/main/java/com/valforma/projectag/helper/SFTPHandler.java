@@ -1,0 +1,157 @@
+package com.valforma.projectag.helper;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
+import com.valforma.projectag.common.util.StepSettingConstants;
+import com.valforma.projectag.contracts.ObjectHolder;
+import com.valforma.projectag.model.Step;
+import com.valforma.projectag.model.StepSettings;
+import com.valforma.projectag.service.StepSettingsService;
+
+@Component
+public class SFTPHandler implements FileHandler {
+	@Autowired
+	StepSettingsService stepSettingsService;
+
+	@Autowired
+	TemplateParser templateParser;
+
+	@Autowired
+	ClientTranslationHelper clientTranslationHelper;
+
+	@Override
+	public List<Object[]> handle(Step step, String user, String host, int port, String password, String baseDir,
+			String newDir, String processedDir, ObjectHolder objectHolder, Integer level, String ppkPath) {
+
+		List<Object[]> objects = new ArrayList<>();
+
+		try {
+			JSch jsch = new JSch();
+			Session session = jsch.getSession(user, host, port);
+			if (ppkPath != null && !ppkPath.trim().isEmpty()) {
+				System.out.println("PPK Path = " + ppkPath);
+				jsch.addIdentity(ppkPath);
+			} else {
+				session.setPassword(password);
+			}
+			session.setConfig("StrictHostKeyChecking", "no");
+			System.out.println("Establishing Connection...");
+			session.connect();
+			System.out.println("Connection established.");
+			System.out.println("Creating SFTP Channel.");
+			ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
+			sftpChannel.connect();
+			System.out.println("SFTP Channel created.");
+			sftpChannel.cd(baseDir);
+			sftpChannel.cd(newDir);
+			StepSettings stepSettings = new StepSettings();
+			stepSettings.setStepId(step.getId());
+			stepSettings.setClientId(step.getClientId());
+			List<StepSettings> stepSettingsList = stepSettingsService.getListByCriteria(stepSettings, -1, 0);
+			String processOnlyOneFile = stepSettingsService.getValue(step.getClientId(), step.getId(),
+					StepSettingConstants.CsvSettings.PROCESS_ONE_FILE_AT_A_TIME.name());
+			if (step.getRequestTemplate() == null || step.getRequestTemplate().isEmpty()) {
+				@SuppressWarnings("unchecked")
+				Vector<ChannelSftp.LsEntry> allFiles = sftpChannel.ls(".");
+				for (ChannelSftp.LsEntry lsSingleFile : allFiles) {
+					String singleFile = lsSingleFile.getFilename();
+					if (singleFile.equals(".") || singleFile.equals("..") || lsSingleFile.getAttrs().isDir())
+						continue;
+					
+					
+					CSVFormat csvFormat = CSVFormat.newFormat(stepSettingsService.getValue(step.getClientId(),
+							step.getId(), StepSettingConstants.CsvSettings.CSV_DELIMITER.name()).charAt(0));
+					CSVParser csvParser = new CSVParser(new InputStreamReader(sftpChannel.get(singleFile)), csvFormat);
+					List<CSVRecord> records = csvParser.getRecords();
+					boolean isFirst = true;
+					int lineNo = 1;
+					for (CSVRecord csvRecord : records) {
+
+						Object[] fields = new Object[csvRecord.size() + 2];
+						for (int i = 0; i < csvRecord.size(); i++) {
+							fields[i] = csvRecord.get(i);
+						}
+						fields[csvRecord.size()] = singleFile;
+						fields[csvRecord.size() + 1] = "" + lineNo;
+						if (isFirst) {
+							String headerPresent = stepSettingsService.getValue(step.getClientId(), step.getId(),
+									StepSettingConstants.CsvSettings.CSV_HEADER_PRESENT.name());
+							if (headerPresent.equals("NO")) {
+								objects.add(fields);
+							}
+						} else {
+							objects.add(fields);
+						}
+
+						isFirst = false;
+						lineNo++;
+					}
+
+					csvParser.close();
+					sftpChannel.rename(baseDir + "/" + newDir + "/" + singleFile,
+							baseDir + "/" + processedDir + "/" + singleFile);
+
+					if (processOnlyOneFile.equals("YES")) {
+						break;
+					} else if (allFiles.size() > 1) {
+						// client.connect(host, port);
+						// client.enterLocalPassiveMode();
+						// client.login(user, password);
+						// client.changeWorkingDirectory("/" + newDir);
+					}
+
+				}
+			} else {
+				clientTranslationHelper.fillTranslatorObject(step, stepSettingsList, objectHolder, level);
+				String fileContent = templateParser.parse(step.getClientId().toString(),
+						"step_path_template_" + step.getId().toString(), step.getRequestTemplate(), objectHolder);
+				// System.out.println(new
+				// ObjectMapper().writeValueAsString(objectHolder));
+				String filePrefix = stepSettingsService.getValue(step.getClientId(), step.getId(), "SAP_FILE_PREFIX");
+				sftpChannel.put(new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8)),
+						filePrefix + "_" + new Date().getTime() + ".csv");
+			}
+			sftpChannel.disconnect();
+			session.disconnect();
+		} catch (JSchException | SftpException | IOException e) {
+			System.out.println(e);
+			return new ArrayList<>();
+		} catch (TranslatorNotFoundException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+		return objects;
+	}
+
+	public static void main(String[] args) throws IOException {
+		System.out.println(new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("./abc.csv"))));
+		BufferedReader br = new BufferedReader(new FileReader("./SAP_FTP_Sample.csv"));
+		String line;
+		while ((line = br.readLine()) != null) {
+
+			System.out.println(line);
+		}
+		br.close();
+	}
+
+}

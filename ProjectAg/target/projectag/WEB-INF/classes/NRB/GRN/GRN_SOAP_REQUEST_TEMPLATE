@@ -1,0 +1,63 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xxn="http://xmlns.oracle.com/apps/per/soaprovider/plsql/xxnrb_grnpush_pkg/" xmlns:xxn1="http://xmlns.oracle.com/apps/per/soaprovider/plsql/xxnrb_grnpush_pkg/xxnrb_grnpush_proc/">
+   <soapenv:Header>
+      <wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+         <wsse:UsernameToken wsu:Id="UsernameToken-AFFD4BD256D3365AC315259488780923">
+            <wsse:Username>NRB</wsse:Username>
+            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">EBS@2018</wsse:Password>
+            <wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">bGnTZ5kuIDNQ4GZ/4+oSgg==</wsse:Nonce>
+            <wsu:Created>2018-05-10T10:41:18.092Z</wsu:Created>
+         </wsse:UsernameToken>
+      </wsse:Security>
+      <xxn:SOAHeader>
+         <xxn:Responsibility></xxn:Responsibility>
+         <xxn:RespApplication></xxn:RespApplication>
+         <xxn:SecurityGroup></xxn:SecurityGroup>
+         <xxn:NLSLanguage></xxn:NLSLanguage>
+         <xxn:Org_Id></xxn:Org_Id>
+      </xxn:SOAHeader>
+   </soapenv:Header>
+   <soapenv:Body>
+      <xxn1:InputParameters>
+         <xxn1:P_RECEIPT_NO>${(configs['1'].currentResponse.header.LOAD_NUMBER)!""}</xxn1:P_RECEIPT_NO>
+         <xxn1:P_SHIPMENT>${(configs['1'].currentResponse.header.SHIPMENT_NUMBER)!""}</xxn1:P_SHIPMENT>
+         <xxn1:P_RECEIPT_DATE>${(configs['1'].currentResponse.header.RECEIPT_DATE)!""}</xxn1:P_RECEIPT_DATE>
+         <xxn1:P_SHIPPED_DATE>${(configs['1'].currentResponse.header.SHIPPED_DATE)!""}</xxn1:P_SHIPPED_DATE>
+         <xxn1:P_SUPPLIER>${(configs['1'].currentResponse.header.VENDOR_NAME)!""}</xxn1:P_SUPPLIER>
+         <xxn1:P_RECEIVED_BY>${(configs['1'].currentResponse.header.RECEIVED_BY)!""}</xxn1:P_RECEIVED_BY>
+         <xxn1:P_CONTEXT_VALUE>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_1)!""}</xxn1:P_CONTEXT_VALUE>
+         <xxn1:P_CLAIM_CENVAT_ONRCPT>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_2)!""}</xxn1:P_CLAIM_CENVAT_ONRCPT>
+         <xxn1:P_VATINV_NONEXCISABLE>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_3)!""}</xxn1:P_VATINV_NONEXCISABLE>
+         <xxn1:P_COMM_INV_NUM>${(configs['1'].currentResponse.header.CUST_FIELD_1)!""}</xxn1:P_COMM_INV_NUM>
+         <xxn1:P_EXCISE_INVDATE>${(configs['1'].currentResponse.header.CUST_DATE_2)!""}</xxn1:P_EXCISE_INVDATE>
+         <xxn1:P_TRANSACTION_TYPE>${(configs['1'].currentResponse.header.CUST_FIELD_3)!""}</xxn1:P_TRANSACTION_TYPE>
+         <xxn1:P_EXCISE_INV_NUM>${(configs['1'].currentResponse.header.CUST_FIELD_4)!""}</xxn1:P_EXCISE_INV_NUM>
+         <xxn1:P_GATE_ENTRYNO>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_6)!""}</xxn1:P_GATE_ENTRYNO>
+         <xxn1:P_GATE_ENTRYDATE>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_7)!""}</xxn1:P_GATE_ENTRYDATE>
+         <xxn1:P_LR_NUM>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_8)!""}</xxn1:P_LR_NUM>
+         <xxn1:P_NO_OF_BOX>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_9)!""}</xxn1:P_NO_OF_BOX>
+         <xxn1:P_NO_OF_CRATES>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_10)!""}</xxn1:P_NO_OF_CRATES>
+         <xxn1:P_WEIGHT_IN_KG>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_11)!""}</xxn1:P_WEIGHT_IN_KG>
+         <xxn1:P_PREMIUM_FREIGHT>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_12)!""}</xxn1:P_PREMIUM_FREIGHT>
+         <xxn1:P_INVENTORY_ORG>${(configs['1'].currentResponse.header.FACILITY)!""}</xxn1:P_INVENTORY_ORG>
+         <xxn1:P_OPERATING_UNIT>${(configs['1'].currentResponse.header.COMPANY)!""}</xxn1:P_OPERATING_UNIT>
+         <xxn1:P_SUPPLIER_INVOICE_NUM>${(configs['1'].currentResponse.header.CUST_FIELD_2)!""}</xxn1:P_SUPPLIER_INVOICE_NUM>
+         <xxn1:P_SUPPLIER_INVOICE_DATE>${(configs['1'].currentResponse.header.CUST_DATE_3)!""}</xxn1:P_SUPPLIER_INVOICE_DATE>
+         <xxn1:P_ORIGINAL_TAX_INVOICE_NUMBER>${(configs['1'].currentResponse.header.CUST_NUMBER_1)!""}</xxn1:P_ORIGINAL_TAX_INVOICE_NUMBER>
+         <xxn1:P_ORIGINAL_TAX_INVOICE_DATE>${(configs['1'].currentResponse.header.CUST_NUMBER_2)!""}</xxn1:P_ORIGINAL_TAX_INVOICE_DATE>
+         <xxn1:P_CONFIRM_TAX>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_4)!""}</xxn1:P_CONFIRM_TAX>
+         <xxn1:P_EWAY_BILL_NO>${(configs['1'].currentResponse.header.CUST_NUMBER_3)!""}</xxn1:P_EWAY_BILL_NO>
+         <xxn1:P_EWAY_BILL_DATE>${(configs['1'].currentResponse.header.CUST_NUMBER_4)!""}</xxn1:P_EWAY_BILL_DATE>
+         <xxn1:P_EWAY_BILL_ACCEPTANCE>${(configs['1'].currentResponse.header.CUST_SHORT_TEST_5)!""}</xxn1:P_EWAY_BILL_ACCEPTANCE>
+         
+         <xxn1:P_ACTUAL_RECEIVED_QTY>${(configs['1'].currentResponse.asnLines[0][0].RECEIVED_QUANTITY)!""}</xxn1:P_ACTUAL_RECEIVED_QTY>
+         <xxn1:P_ITEM>${(configs['1'].currentResponse.asnLines[0][0].ITEM_CODE[0])!""}</xxn1:P_ITEM>
+         <xxn1:P_DESCRIPTION>${(configs['1'].currentResponse.asnLines[0][0].DESCRIPT)!""}</xxn1:P_DESCRIPTION>
+         <xxn1:P_UOM>${(configs['1'].currentResponse.asnLines[0][0].CUST_SHOW_TEXT_1)!""}</xxn1:P_UOM>
+         <xxn1:P_INV_ORG>${(configs['1'].currentResponse.asnLines[0][0].FACILITY_CODE)!""}</xxn1:P_INV_ORG>
+         <xxn1:P_PO_NUMBER>${(configs['1'].currentResponse.asnLines[0][0].PO_NUMBER)!""}</xxn1:P_PO_NUMBER>
+         <xxn1:P_QUANTITY>${(configs['1'].currentResponse.asnLines[0][0].SHIPPED_QUANTITY)!""}</xxn1:P_QUANTITY>
+         <xxn1:P_LOT_NUMBER>${(configs['1'].currentResponse.asnLines[0][0].BATCH_NUMBER)!""}</xxn1:P_LOT_NUMBER>
+         <xxn1:P_SUPPLIER_LOT_NUMBER>${(configs['1'].currentResponse.asnLines[0][0].ATTRIBUTE_A)!""}</xxn1:P_SUPPLIER_LOT_NUMBER>
+      </xxn1:InputParameters>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,25 @@
+function converter(holder, myCode) {
+	var salesRepMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Users.length; i++) {
+		var obj = myCode.configs['0'].values['2'].Users[i];
+		if (obj.roleId == "7") {
+			var salesRepMaster = {};
+			
+			salesRepMaster.Distributor_Code = obj.For[0].warehouseerp_id;
+			salesRepMaster.Region_Code = obj.For[0].zoneId;
+			salesRepMaster.User_Code = obj.id;
+			salesRepMaster.User_Name = obj.name;
+			salesRepMaster.User_Type = "PRESELL"; //
+			salesRepMaster.Gender = "M";			//
+			salesRepMaster.Address = obj.address;
+			salesRepMaster.MobileNo = obj.phoneno;
+			salesRepMaster.EmailID = obj.email;
+			salesRepMaster.User_Login_Id = obj.username;
+			salesRepMaster.Flag = obj.active;
+			
+	    	salesRepMasterArr.push(salesRepMaster);
+	    }
+	}
+	return JSON.stringify(salesRepMasterArr);
+ }
+ 

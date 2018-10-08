@@ -1,0 +1,34 @@
+<#setting date_format="yyyy-MM-dd">
+<Skunit>
+	<name>${configs['0'].values['0'][0]?trim}</name>
+	<mrp>${(configs['0'].values['0'][1]?trim  == "") ? then((configs['0'].values['0'][3]?trim == "") ? then('0', configs['0'].values['0'][3]?trim), configs['0'].values['0'][1]?trim)}</mrp>
+	<vat>${(configs['0'].values['0'][2]?trim == "") ? then('0', configs['0'].values['0'][2]?trim)}</vat>
+	<price>${(configs['0'].values['0'][3]?trim == "") ? then((configs['0'].values['0'][1]?trim == "") ? then('0', configs['0'].values['0'][1]?trim), configs['0'].values['0'][3]?trim)}</price>
+	<unitspercase>${(configs['0'].values['0'][17]?trim == "") ? then('0', configs['0'].values['0'][17]?trim)}</unitspercase> 	<#-- DEFAULT -->
+	<unitcase>1</unitcase>
+	<category>${(configs['0'].values['0'][4]?trim == "") ? then('ERP', configs['0'].values['0'][4]?trim)}</category>
+	<brand>${(configs['0'].values['0'][5]?trim == "") ? then('ERP', configs['0'].values['0'][5]?trim)}</brand>
+	<variant>${(configs['0'].values['0'][6]?trim == "") ? then('ERP', configs['0'].values['0'][6]?trim)}</variant>
+	<packaging>${(configs['0'].values['0'][17]?trim == "") ? then('ERP', configs['0'].values['0'][17]?trim)}</packaging>	<#-- DEFAULT -->
+	<size>${(configs['0'].values['0'][18]?trim == "") ? then('0', configs['0'].values['0'][18]?trim)}</size>	<#-- DEFAULT -->
+	<unit>${(configs['0'].values['0'][19]?trim == "") ? then('ERP', configs['0'].values['0'][19]?trim)}</unit>	<#-- DEFAULT -->
+	<focussku>${(configs['0'].values['0'][20]?trim == "") ? then('0', configs['0'].values['0'][20]?trim)}</focussku><#-- DEFAULT -->
+	<skucode>${configs['0'].translatorMap['2'].SKU_SAP_BIZOM[configs['0'].values['0'][7]]}</skucode>
+	<description>${(configs['0'].values['0'][21]?trim == "") ? then('ERP', configs['0'].values['0'][21]?trim)}</description>	<#-- DEFAULT -->
+	<fordevice>${(configs['0'].values['0'][8]?trim == "") ? then('0', configs['0'].values['0'][8]?trim)}</fordevice>
+	<active>${(configs['0'].values['0'][9]?trim == "") ? then('1', configs['0'].values['0'][9]?trim)}</active>
+	<standardcase>${(configs['0'].values['0'][10]?trim == "") ? then('0', configs['0'].values['0'][10]?trim)}</standardcase>
+	<freesku_code>${(configs['0'].values['0'][11]?trim == "") ? then('0', configs['0'].values['0'][11]?trim)}</freesku_code>
+	<freeskuquantity>${(configs['0'].values['0'][12]?trim == "") ? then('0', configs['0'].values['0'][12]?trim)}</freeskuquantity>
+	<erp_group_id>${(configs['0'].values['0'][13]?trim == "") ? then('ERP', configs['0'].values['0'][13]?trim)}</erp_group_id>          	    
+	<servesize>${(configs['0'].values['0'][22]?trim == "") ? then('ERP', configs['0'].values['0'][22]?trim)}</servesize> <#-- DEFAULT -->
+	<subbrand>${(configs['0'].values['0'][23]?trim == "") ? then('ERP', configs['0'].values['0'][23]?trim)}</subbrand> <#-- DEFAULT -->
+	<subpack>${(configs['0'].values['0'][24]?trim == "") ? then('ERP', configs['0'].values['0'][24]?trim)}</subpack> <#-- DEFAULT -->
+	<businesstype>${(configs['0'].values['0'][25]?trim == "") ? then('ERP', configs['0'].values['0'][25]?trim)}</businesstype> <#-- DEFAULT -->
+	<gst>${(configs['0'].values['0'][14]?trim == "") ? then(0, configs['0'].values['0'][14]?trim)}</gst>
+	<cess>${(configs['0'].values['0'][26]?trim == "") ? then('0', configs['0'].values['0'][26]?trim)}</cess> <#-- DEFAULT -->
+	<hsncode>${configs['0'].values['0'][15]}</hsncode>
+</Skunit>
+
+
+<#--configs['1'].translatorMap['1'].SKU_SAP_BIZOM[skucode]-->

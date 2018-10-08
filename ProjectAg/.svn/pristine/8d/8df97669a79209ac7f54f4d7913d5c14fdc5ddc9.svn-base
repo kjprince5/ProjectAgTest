@@ -1,0 +1,65 @@
+	function converter(holder, myCode) {
+	        var parentDict = {};
+	        if( myCode['env:Body'][0].OutputParameters[0].P_PO_DETAILS_TBL.size()==0)
+	        return null;
+	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_PO_DETAILS_TBL[0].P_PO_DETAILS_TBL_ITEM;
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i].PO_NUMBER[0]] === undefined) {
+		                parentDict[myCode[i].PO_NUMBER[0]] = [];
+		                var headerObject={};
+		                headerObject["CREATE_UPDATE"]=myCode[i].CREATE_UPDATE;
+						headerObject["REVISION_NUM"]=myCode[i].REVISION_NUM;
+						headerObject["INVENTORY_ORG"]=myCode[i].INVENTORY_ORG;
+						headerObject["CONTACT"]=myCode[i].CONTACT;
+						headerObject["CURRENCY"]=myCode[i].CURRENCY;
+						headerObject["CREATEDED_DATE"]=myCode[i].CREATEDED_DATE;
+						headerObject["SITE"]=myCode[i].SITE;
+						headerObject["TOTAL"]=myCode[i].TOTAL;
+						headerObject["STATUS"]=myCode[i].STATUS;
+						headerObject["DESCRIPTION"]=myCode[i].DESCRIPTION;
+						headerObject["BUYER"]=myCode[i].BUYER;
+						headerObject["BILL_TO_LOCATION"]=myCode[i].BILL_TO_LOCATION;
+						headerObject["SHIP_TO_LOCATION"]=myCode[i].SHIP_TO_LOCATION;
+						headerObject["OPERATING_UNIT"]=myCode[i].OPERATING_UNIT;
+						headerObject["VENDOR_NUM"]=myCode[i].VENDOR_NUM;
+						headerObject["ORDER_TYPE"]=myCode[i].ORDER_TYPE;
+						headerObject["PO_NUMBER"]=myCode[i].PO_NUMBER;
+		                parentDict[myCode[i].PO_NUMBER[0]].header=headerObject;
+		                parentDict[myCode[i].PO_NUMBER[0]].itemList=new ArrayList();
+		                
+		            }
+		            var item = new ArrayList();
+		            var obj={};
+		            obj["EFFECTIVE_DATE"]=myCode[i].EFFECTIVE_DATE;
+					obj["LINE_NUMBER"]=myCode[i].LINE_NUMBER;
+					obj["ITEM_TYPE"]=myCode[i].ITEM_TYPE;
+					obj["ITEM_CODE"]=myCode[i].ITEM_CODE;
+					obj["QUANTITY"]=myCode[i].QUANTITY;
+					obj["UNIT_PRICE"]=myCode[i].UNIT_PRICE;
+					obj["PROMISED_DATE"]=myCode[i].PROMISED_DATE;
+					obj["NEED_BY_DATE"]=myCode[i].NEED_BY_DATE;
+					obj["UOM"]=myCode[i].UOM;
+					obj["INPUT_WEIGHT"]=myCode[i].INPUT_WEIGHT;
+					obj["OUTPUT_WEIGHT"]=myCode[i].OUTPUT_WEIGHT;
+					obj["WEIGHT_OF_SCRAP"]=myCode[i].WEIGHT_OF_SCRAP;
+					obj["REMARKS"]=myCode[i].REMARKS;
+					obj["INVENTRY_ORG"]=myCode[i].INVENTRY_ORG;
+					obj["BUSINESS_UNIT"]=myCode[i].BUSINESS_UNIT;
+							
+		            
+		            item.add(obj);
+		           
+		            parentDict[myCode[i].PO_NUMBER[0]].itemList.add(item);
+		     
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }
+	    
+	    
+

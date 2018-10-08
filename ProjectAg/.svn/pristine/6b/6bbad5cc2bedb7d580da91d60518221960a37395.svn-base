@@ -1,0 +1,15 @@
+function converter(holder, myCode) {
+	var reasonMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].data.length; i++) {
+		
+		var data = myCode.configs['0'].values['2'].data[i]
+		var reasonMaster = {};
+		reasonMaster.Reason_Code = data.Reason.id;
+		reasonMaster.Reason_Name = data.Reason.reason;
+		reasonMaster.Reason_Type = data.Reason.reasoncategory_id;
+		reasonMaster.Flag = "1";
+    	reasonMasterArr.push(reasonMaster);
+	}
+	return JSON.stringify(reasonMasterArr);
+ }
+ 

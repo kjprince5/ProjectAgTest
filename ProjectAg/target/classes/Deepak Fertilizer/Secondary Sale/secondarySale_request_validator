@@ -1,0 +1,16 @@
+function converter(holder, myCode) {
+				var error= "";
+				for(var i =0; i <myCode.configs['1'].currentResponse.paymentDetails.length;i++ )
+				{
+				var code = Number(myCode.configs['1'].currentResponse.paymentDetails[i].sapSkuCode).toString();
+	        if(myCode.configs['0'].translatorMap['3'][code]== undefined || myCode.configs['0'].translatorMap['3'][code]==null )
+	        {
+	        error = error+" "+code;
+	        }
+			}
+				if(error!="")
+				{
+				error = "There are no sku details for the following sku codes in bizom :"+ error;
+				}
+	        return error;
+	    }

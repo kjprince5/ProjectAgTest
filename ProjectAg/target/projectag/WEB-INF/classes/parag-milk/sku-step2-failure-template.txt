@@ -1,0 +1,27 @@
+<#setting date_format="yyyy-MM-dd">
+<Skunit>
+    <name>${configs['0'].values['0'][0]}</name>
+    <description>${configs['0'].values['0'][1]}</description>
+    <category>${configs['0'].values['0'][2]}</category>
+    <size>${configs['0'].values['0'][3]}</size>
+    <mrp>${configs['0'].values['0'][4]}</mrp>
+    <gst>${configs['0'].values['0'][5]}</gst>
+    <price>${configs['0'].values['0'][6]}</price>
+    <unitspercase>${configs['0'].values['0'][7]}</unitspercase>
+    <skucode>${configs['0'].values['0'][8]}</skucode>  
+    <erp_group_id>${configs['0'].values['0'][9]}</erp_group_id> 
+    <vat>0</vat>
+    <unitcase>1</unitcase> <!--Default 1-->
+    <unit>ERP</unit>
+    <brand>ERP</brand>
+    <focussku>1</focussku>   
+    <variant>ERP</variant>
+    <packaging>ERP</packaging>
+    <fordevice>1</fordevice>   <!--Default 1-->
+    <active>1</active>         <!--Default 1-->
+    <standardcase>20</standardcase>
+    <servesize>ERP</servesize>
+    <businesstype>ERP</businesstype>
+    <subbrand>ERP</subbrand>
+    <subpack>ERP</subpack>   
+</Skunit>

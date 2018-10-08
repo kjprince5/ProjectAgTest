@@ -1,0 +1,24 @@
+<#setting date_format="yyyy-MM-dd">
+<Warehouse>
+    <erp_id>${configs['0'].values['0'][0]}</erp_id>
+    <name>${configs['0'].values['0'][1]}</name>
+    <address>${configs['0'].values['0'][3]}</address>
+    <state>${configs['0'].values['0'][9]}</state>
+    <city>${configs['0'].values['0'][7]}</city>
+    <state_id>${configs['0'].values['0'][9]}</state_id>
+    <gstinno>${configs['0'].values['0'][6]}</gstinno>
+    <phoneno>${configs['0'].values['0'][5]}</phoneno>
+    <email>${configs['0'].values['0'][4]}</email>
+    <jurisdiction>${configs['0'].values['0'][11]}</jurisdiction>
+    <zone_id>1</zone_id>
+    <areapincode>${configs['0'].values['0'][10]}</areapincode> 
+    <businesstype>${configs['0'].values['0'][12]}</businesstype> 
+    <warehouse_erp_id>0</warehouse_erp_id> <!--Default 0 -->
+    <taxno>ERP Tax no</taxno>
+    <tnc>NA</tnc>  <!--Default NA -->
+    <active>1</active> <!--Default 1 -->  
+    <distributiontype>Direct Distributor</distributiontype>
+    <area>Distributor Area</area>
+    <populationstrata>Metros</populationstrata> <!--Default Metros -->
+</Warehouse>
+

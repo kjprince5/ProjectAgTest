@@ -1,0 +1,30 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i][2]] === undefined) {
+		                parentDict[myCode[i][2]] = [];
+		                parentDict[myCode[i][2]].erp_id=myCode[i][2];
+		                parentDict[myCode[i][2]].name=myCode[i][5];
+		                parentDict[myCode[i][2]].code=myCode[i][6];
+		                parentDict[myCode[i][2]].pin=myCode[i][13];
+		                parentDict[myCode[i][2]].state_id=myCode[i][14];
+		                parentDict[myCode[i][2]].ownermobile=myCode[i][16];
+		                parentDict[myCode[i][2]].areaname=myCode[i][20];
+		                parentDict[myCode[i][2]].email=myCode[i][17];
+		                parentDict[myCode[i][2]].panno=myCode[i][23];
+		                parentDict[myCode[i][2]].licenseno=myCode[i][25];
+		                parentDict[myCode[i][2]].licensevalidfrom=myCode[i][26];
+		                parentDict[myCode[i][2]].licenseTo=myCode[i][27];
+		                parentDict[myCode[i][2]].gstinno=myCode[i][41];
+		                parentDict[myCode[i][2]].fileCreationDate=str.split("_")[size-2];
+		            }
+		     
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }

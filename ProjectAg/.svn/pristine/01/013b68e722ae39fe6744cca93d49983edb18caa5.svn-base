@@ -1,0 +1,38 @@
+<html> 
+	<head> 
+		<style> 
+			#customers { font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif; border-collapse: collapse;  width: 100%;}  
+			#customers td, #customers th {  border: 1px solid #ddd;  padding: 8px; } 
+			#customers tr:nth-child(even){background-color: #f2f2f2;} 
+			#customers tr:hover {background-color: #ddd;} 
+			#customers th { padding-top: 12px;   padding-bottom: 12px;  text-align: left;   background-color: #4CAF50;  color: white; } 
+		</style> 
+	</head> 
+	<body> 
+		Hello There,   All the stopped job details are listed below:. 
+		<div style='padding-top:20px;'> 
+			<table id='customers'> 
+				<tr> 
+					<th> Job Id </th> 
+					<th> Job Name </th> 
+					<th> Last start time </th> 
+					<th> Last end time </th> 
+					<th> Next Runtime </th>
+					<th> Interval </th>
+					<th> Interval Type</th>
+				</tr>
+				<#list jobDetailList  as jobDetail>
+					<tr>
+						<td> ${jobDetail.id} </td>
+						<td> ${jobDetail.jobName} </td> 
+						<td> ${jobDetail.lastStartTime} </td> 
+						<td> ${jobDetail.lastEndTime} </td> 
+						<td> ${jobDetail.nextRunTime} </td>
+						<td> ${jobDetail.interval} </td> 
+						<td> ${jobDetail.intervalType} </td>  
+					</tr>
+				</#list>
+			</table>
+		</div>
+	</body>
+</html>

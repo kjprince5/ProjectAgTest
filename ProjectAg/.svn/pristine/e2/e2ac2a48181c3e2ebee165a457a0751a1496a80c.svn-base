@@ -1,0 +1,27 @@
+function converter(holder, myCode) {
+	var distributorMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Warehouses.length; i++) {
+		
+		var obj = myCode.configs['0'].values['2'].Warehouses[i];
+		
+		if (obj.Warehousetype.id == "3") {
+		
+			var distributorMaster = {};
+			
+			distributorMaster.Distributor_Code = obj.Warehouse.Warehouse_erpid;
+			distributorMaster.Distributor_Name = obj.Warehouse.WarehouseName;
+			distributorMaster.Address = obj.Warehouse.address;
+			distributorMaster.Phone = obj.Warehouse.phoneno;
+			distributorMaster.Email_Id = obj.Warehouse.email;
+			distributorMaster.TIN_No = ""; //
+			distributorMaster.CST_No = ""; //
+			distributorMaster.Contact_Person_Name = ""; //
+			distributorMaster.Contact_Person_Phone = ""; //
+			distributorMaster.Region_Code = obj.Zone.ZoneId;
+			distributorMaster.Flag = obj.Warehouse.isactive;
+			
+	    	distributorMasterArr.push(distributorMaster);
+	    }
+	}
+	return JSON.stringify(distributorMasterArr);
+ }

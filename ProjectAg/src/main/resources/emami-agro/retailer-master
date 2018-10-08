@@ -1,0 +1,46 @@
+function converter(holder, myCode) {
+	var retailerMasterArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Outlets.length; i++) {
+		var obj = myCode.configs['0'].values['2'].Outlets[i];
+		if(obj!=" " && obj!=undefined && obj!="" && obj!=null && obj.approved == 1 )
+		{
+		var retailerMaster = {};
+		
+		retailerMaster.Distributor_Code = obj.warehouse_erpid;
+		retailerMaster.Retailer_Code = obj.erp_id;
+		retailerMaster.Retailer_Name = obj.name;
+		retailerMaster.Route_Code = obj.beatid
+		retailerMaster.Channel_Name = obj.type;
+		retailerMaster.Sub_Channel_Name = obj.Subchannel_1; //
+		retailerMaster.Sub_Channel1_Name = obj.Subchannel_2; //
+		retailerMaster.Class = obj.outletcategory;
+		retailerMaster.Address1 = obj.address;
+		retailerMaster.Region_Code = obj.zoneId;
+		retailerMaster.Zip_Code = obj.pin;
+		retailerMaster.Contact_Phone_No = obj.ownermobile;
+		retailerMaster.Contact_Person = obj.ownername;
+		retailerMaster.Mobile_No = obj.phoneno;
+		retailerMaster.Email_Id = obj.email;
+		retailerMaster.CST_Number = obj.cstno,
+		retailerMaster.PAN_Number = obj.panno;
+		retailerMaster.Tax_Number = obj.taxno;
+		retailerMaster.Credit_Days = obj.credit_days;
+		retailerMaster.Credit_Limit = obj.credit_limit;
+		retailerMaster.Latitude = obj.latitude;
+		retailerMaster.Longitude = obj.longitude;
+		
+		if(obj.outletstate_id=="1")
+		{
+		retailerMaster.Flag = "1";
+		}
+		else
+		{
+		retailerMaster.Flag = "0";
+		}
+		
+    	retailerMasterArr.push(retailerMaster);
+		}
+		
+	}
+	return JSON.stringify(retailerMasterArr);
+ } 

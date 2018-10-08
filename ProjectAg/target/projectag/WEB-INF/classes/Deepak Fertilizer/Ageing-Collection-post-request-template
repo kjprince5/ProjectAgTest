@@ -1,0 +1,15 @@
+<#setting date_format="yyyy-MM-dd"><?xml version="1.0" encoding="UTF-8" ?>
+	<datas>
+		<data>
+			<outlet_erp_id>${(configs['1'].currentResponse[2])!""}</outlet_erp_id>
+			<col_0_to_30>${(configs['1'].currentResponse[7])?replace("@#$", "")}</col_0_to_30>
+			<col_31_to_60>${(configs['1'].currentResponse[8])?replace("@#$", "")}</col_31_to_60>
+			<col_61_to_90>${(configs['1'].currentResponse[9])?replace("@#$", "")}</col_61_to_90>
+			<col_91_to_120>${(configs['1'].currentResponse[10])?replace("@#$", "")}</col_91_to_120>
+			<col_121_to_150>0.00</col_121_to_150>
+			<col_151_to_180>0.00</col_151_to_180>
+			<above_180>${(configs['1'].currentResponse[11])?replace("@#$", "")}</above_180>
+			<ageingdate>${(configs['1'].currentResponse[15])?datetime("yyyyMMdd")?date}</ageingdate>
+			<total>${(configs['1'].currentResponse[12])?replace("@#$", "")}</total>
+		</data>
+	</datas>

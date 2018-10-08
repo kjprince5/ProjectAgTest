@@ -1,0 +1,25 @@
+function converter(holder, myCode) {
+	var invoiceDetailArr = [];
+	for (i = 0; i < myCode.configs['0'].values['2'].Payments.length; i++) {
+		
+		var obj = myCode.configs['0'].values['2'].Payments[i];
+		for (j = 0; j < obj.Paymentdetail.length; j++) {
+			var invoiceDetail = {};
+			invoiceDetail.Distributor_Code = obj.Warehouse.erp_id;
+			invoiceDetail.SalesRepresentative_Code = obj.Payment.orderuser_id;
+			invoiceDetail.Invoice_No = obj.Payment.invoiceid;
+			invoiceDetail.Invoice_Date = obj.Payment.fordate ;
+			invoiceDetail.Retailer_Code = obj.Outlet.erp_id ;
+			invoiceDetail.Product_Code = obj.Paymentdetail[j].skunit_id ;
+			invoiceDetail.Product_UOM = "PIECE";
+			invoiceDetail.Qty = obj.Paymentdetail[j].quantity ;
+			invoiceDetail.Line_Value = obj.Paymentdetail[j].amount ;
+			invoiceDetail.Bill_Value = obj.Payment.amount ;
+			invoiceDetail.Order_RefNo ="" //
+			//invoiceDetail.Flag = "1";
+	    	invoiceDetailArr.push(invoiceDetail);
+	    }
+	}
+	return JSON.stringify(invoiceDetailArr);
+ }
+ 

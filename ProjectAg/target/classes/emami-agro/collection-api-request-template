@@ -1,0 +1,27 @@
+[
+{
+"warehouse_erp_id":"${configs['1'].currentResponse.warehouse_erp_id}",
+"outlet_erp_id":"${configs['1'].currentResponse.outlet_erp_id}",
+"amount":"${configs['1'].currentResponse.amount}",
+"fordate":"${configs['1'].currentResponse.fordate}",
+"mode":"${configs['1'].currentResponse.mode}",
+<#assign mode=configs['1'].currentResponse.mode!"null" />
+<#if mode == 'check'>
+  "Check":{
+			"checkno":"${configs['1'].currentResponse.Check.checkno}",
+			"bankname":"${configs['1'].currentResponse.Check.bankname}",
+			"checkdate":"${configs['1'].currentResponse.Check.checkdate}"
+		}
+</#if>
+<#if mode == 'online'>
+  "Onlinetransaction":{
+					"transactionid":"${configs['1'].currentResponse.Onlinetransaction.checkno}",
+					"bankname":"${configs['1'].currentResponse.Onlinetransaction.bankname}",
+					"date":"${configs['1'].currentResponse.Onlinetransaction.checkdate}"
+					}
+		
+</#if>
+		
+
+}
+]

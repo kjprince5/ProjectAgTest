@@ -1,0 +1,52 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        
+	        if( myCode['env:Body'][0].OutputParameters[0].P_PRDNOTE_DETAILS_TBL.size()==0)
+	        return null;
+	                    
+	   myCode=    myCode['env:Body'][0].OutputParameters[0].P_PRDNOTE_DETAILS_TBL[0].P_PRDNOTE_DETAILS_TBL_ITEM;
+	        var ArrayList = Java.type('java.util.ArrayList');
+	        for (i = 0; i < myCode.length; i++) {
+		        
+		            if (parentDict[myCode[i].JOB_NAME[0]] === undefined) {
+		                parentDict[myCode[i].JOB_NAME[0]] = [];
+		                var headerObject={};
+						headerObject["BUSINESS_UNIT"]=myCode[i].BUSINESS_UNIT;
+						headerObject["JOB_NAME"]=myCode[i].JOB_NAME;
+						headerObject["OPERATING_UNIT"]=myCode[i].OPERATING_UNIT;
+						headerObject["INVENTORY_ORG"]=myCode[i].INVENTORY_ORG;
+						headerObject["DATE_LAST_MOVED"]=myCode[i].DATE_LAST_MOVED;
+						headerObject["TRANSACTION_DATE"]=myCode[i].TRANSACTION_DATE;
+		                parentDict[myCode[i].JOB_NAME[0]].header=headerObject;
+		                parentDict[myCode[i].JOB_NAME[0]].itemList=new ArrayList();
+		                
+		            }
+		            var item = new ArrayList();
+		            var obj={};
+		            obj["BUSINESS_UNIT"]=myCode[i].BUSINESS_UNIT;
+					obj["ORGANIZATION_ID"]=myCode[i].ORGANIZATION_ID;
+					obj["WIP_ENTITY_ID"]=myCode[i].WIP_ENTITY_ID;
+					obj["ITEM_CODE"]=myCode[i].ITEM_CODE;
+					obj["DESCRIPTION"]=myCode[i].DESCRIPTION;
+					obj["DATE_LAST_MOVED"]=myCode[i].DATE_LAST_MOVED;
+					obj["OPERATION_SEQ_NUM"]=myCode[i].OPERATION_SEQ_NUM;
+					obj["AVAILABLE_QUANTITY"]=myCode[i].AVAILABLE_QUANTITY;
+					obj["TRANSACTION_QUANTITY"]=myCode[i].TRANSACTION_QUANTITY;
+					obj["LAST_UPDATE_DATE"]=myCode[i].LAST_UPDATE_DATE;
+					obj["TRANSACTION_UOM"]=myCode[i].TRANSACTION_UOM;
+					obj["PRIMARY_QUANTITY"]=myCode[i].PRIMARY_QUANTITY;		
+		            obj["PRIMARY_UOM"]=myCode[i].PRIMARY_UOM;
+		            item.add(obj);
+		           
+		            parentDict[myCode[i].JOB_NAME[0]].itemList.add(item);
+		     
+	        }
+	        var object = new ArrayList();;
+	        for (var key in parentDict) {
+		            object.add(parentDict[key]);
+	        }
+	        return object;
+	    }
+	    
+	    
+

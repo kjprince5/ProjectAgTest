@@ -1,0 +1,10 @@
+function converter(holder, myCode) {
+	        var parentDict = {};
+	        myCode= myCode.configs['0'].values['2'].Products;
+	        for (i = 0; i < myCode.length; i++) {
+		            if (parentDict[myCode[i].Skunit.skucode] === undefined) {
+		                parentDict[myCode[i].Skunit.skucode] = myCode[i];
+		               }
+	        }
+	        return parentDict;
+	    }

@@ -1,0 +1,26 @@
+function converter(holder, myCode) {
+	var schemeSlabMasterArr = [];
+	for (var key in myCode.configs['0'].values['2'].Response.schemedetail) {
+		var obj = myCode.configs['0'].values['2'].Response.schemedetail[key].Scheme;
+		
+		if(obj.active==1)
+		{
+		var schemeMaster = {};
+		
+		schemeMaster.Scheme_Code = obj.erp_id;
+		schemeMaster.Slab_Description = obj.name;
+		schemeMaster.Qty_Slab_From = obj.forquantity;
+		schemeMaster.Qty_Slab_To = obj.forquantity;
+		schemeMaster.Value_Slab_From = obj.foramount;
+		schemeMaster.Value_Slab_To = obj.foramount;
+		schemeMaster.Disc_Amount = obj.saverupee;
+		schemeMaster.Disc_Percentage = obj.discountpercent;
+		
+		if (obj.unitcasecalculation == 0) {
+			schemeMaster.Slab_Unit_Measure = "PIECE";
+		} else if (obj.unitcasecalculation == 1) {
+			schemeMaster.Slab_Unit_Measure = "CASE";
+		}
+		schemeMaster.Purchase_of_Every = ""; 
+		schemeMaster.Flag = obj.active;schemeSlabMasterArr.push(schemeMaster);}}return JSON.stringify(schemeSlabMasterArr);}
+ 
